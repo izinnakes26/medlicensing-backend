@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - MedLicensing.id</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #0B3D5C;
+      --secondary: #2A6F97;
+      --accent: #1B9AAA;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #3B82F6;
+      --bg: #F3F4F6;
+      --text: #1F2937;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: var(--primary); color: white; padding: 24px 0; overflow-y: auto; }
+    .sidebar-header { padding: 0 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-header h2 { font-size: 1.5rem; font-weight: 700; }
+    .sidebar-header small { opacity: 0.7; }
+    .sidebar-menu { padding: 16px 0; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: rgba(255,255,255,0.8); text-decoration: none; transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(255,255,255,0.1); color: white; }
+    .sidebar-menu i { width: 20px; }
+
+    .main-content { margin-left: 260px; padding: 32px; }
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 { font-size: 2rem; margin-bottom: 8px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 32px; }
+    .stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-card h3 { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 8px; }
+    .stat-card .value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+
+    .verification-links { background: white; padding: 24px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .filters { background: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .filters input, .filters select { padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
+    .filters input { flex: 1; min-width: 200px; }
+
+    .table-container { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--bg); }
+    th { padding: 16px; text-align: left; font-weight: 600; font-size: 0.875rem; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+    td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+
+    tr.needs-followup { background: #FEF3C7 !important; border-left: 4px solid var(--warning); }
+    tr.needs-followup:hover { background: #FDE68A !important; }
+
+    .status-badge, .payment-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
+    .status-new { background: #DBEAFE; color: #1E40AF; }
+	.status-pending { background: #F3F4F6; color: #4B5563; }
+    .status-verified { background: #D1FAE5; color: #065F46; }
+    .status-in_progress { background: #FEF3C7; color: #92400E; }
+    .status-completed { background: #D1FAE5; color: #065F46; }
+    .status-skp_issue { background: #FED7AA; color: #9A3412; }
+    .status-needs_verification { background: #FEE2E2; color: #991B1B; }
+    .status-expiring_soon { background: #FED7AA; color: #9A3412; }
+	.status-manual_check_required { background: #FEE2E2; color: #991B1B; }
+
+    /* BADGE PEMBAYARAN (BARU) */
+    .pay-unpaid { background: #F3F4F6; color: #4B5563; }
+    .pay-waiting { background: #FEF3C7; color: #92400E; }
+    .pay-dp { background: #DBEAFE; color: #1E40AF; }
+    .pay-lunas { background: #D1FAE5; color: #065F46; }
+
+    .urgency-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+    .urgency-urgent { background: #FEE2E2; color: #991B1B; animation: pulse 2s infinite; }
+    .urgency-soon { background: #FEF3C7; color: #92400E; }
+    .urgency-normal { background: #D1FAE5; color: #065F46; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+    .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--secondary); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-warning:hover { background: #D97706; }
+    .btn-info { background: var(--info); color: white; }
+    .btn-info:hover { background: #2563EB; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #DC2626; }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 12px; padding: 32px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .modal-header { margin-bottom: 24px; }
+    .modal-header h2 { font-size: 1.5rem; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+    .form-group select, .form-group textarea, .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+
+    .document-link { color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .document-link:hover { text-decoration: underline; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .template-buttons { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+    .template-btn { padding: 12px; background: #F3F4F6; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .template-btn:hover { border-color: var(--accent); background: #EFF6FF; }
+    .template-btn strong { display: block; margin-bottom: 4px; color: var(--primary); }
+    .template-btn small { color: var(--text-muted); }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; position: relative; }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>⚕️ MedLicensing</h2>
+      <small>Admin Dashboard</small>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="/landing" target="_blank"><i class="fas fa-external-link-alt"></i> Lihat Landing Page</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Dashboard Leads</h1>
+      <p>Kelola leads, verifikasi dokumen, dan tingkatkan closing rate</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><h3>Total Leads</h3><div class="value" id="totalLeads">0</div></div>
+      <div class="stat-card"><h3>🔥 Urgent (&lt; 30 hari)</h3><div class="value" id="urgentLeads" style="color: var(--danger);">0</div></div>
+      <div class="stat-card"><h3>⚠️ Perlu Follow-up</h3><div class="value" id="followupLeads" style="color: var(--warning);">0</div></div>
+      <div class="stat-card"><h3>✅ Selesai</h3><div class="value" id="completedLeads" style="color: var(--success);">0</div></div>
+    </div>
+
+    <!-- Verification Links -->
+    <div class="verification-links">
+      <h3 style="margin-bottom: 16px; color: var(--primary);"><i class="fas fa-external-link-alt"></i> Link Verifikasi Resmi</h3>
+      <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.9rem;">Gunakan link berikut untuk verifikasi data STR/SIP secara manual:</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <a href="https://www.kki.go.id/ceknamednakes/form" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #F3F4F6; border-radius: 8px; text-decoration: none; color: var(--text);">
+          <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;"><i class="fas fa-user-md"></i></div>
+          <div><div style="font-weight: 600;">Konsil Kedokteran Indonesia</div><div style="font-size: 0.8rem; color: var(--text-muted);">Cek STR & Registrasi</div></div>
+        </a>
+        <a href="https://satusehat.kemkes.go.id/sdmk" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #F3F4F6; border-radius: 8px; text-decoration: none; color: var(--text);">
+          <div style="width: 40px; height: 40px; background: var(--success); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;"><i class="fas fa-building"></i></div>
+          <div><div style="font-weight: 600;">Kementerian Kesehatan RI</div><div style="font-size: 0.8rem; color: var(--text-muted);">Website Utama Kemenkes</div></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="🔍 Cari nama, NIK, atau STR...">
+      <select id="filterStatus">
+        <option value="">Semua Status</option>
+        <option value="new">Baru</option>
+        <option value="verified">Terverifikasi</option>
+        <option value="in_progress">Sedang Diproses</option>
+        <option value="completed">Selesai</option>
+        <option value="skp_issue">Masalah SKP</option>
+        <option value="needs_verification">Perlu Verifikasi</option>
+        <option value="expiring_soon">SIP Expired</option>
+      </select>
+      <select id="filterUrgency">
+        <option value="">Semua Urgency</option>
+        <option value="urgent">🔥 Urgent (&lt; 30 hari)</option>
+        <option value="soon">️ Segera (30-90 hari)</option>
+        <option value="normal">✅ Normal (&gt; 90 hari)</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Urgency</th>
+            <th>Tanggal</th>
+            <th>Nama</th>
+            <th>Profesi</th>
+            <th>STR</th>
+            <th>WhatsApp</th>
+            <th>Total</th>
+            <th>Status Bayar</th>
+            <th>Status</th>
+            <th>Follow-up</th>
+            <th>Dokumen</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="leadsTable">
+          <tr>
+            <td colspan="12" style="text-align: center; padding: 40px;">
+              <i class="fas fa-spinner fa-spin"></i> Loading...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal Update Status -->
+  <div class="modal" id="updateModal">
+    <div class="modal-content">
+      <div class="modal-header"><h2>Update Status Lead</h2></div>
+      <form id="updateForm">
+        <input type="hidden" id="updateId">
+        <div class="form-group">
+          <label>Status</label>
+          <select id="updateStatus" required>
+		  <option value="new">Baru</option>
+		  <option value="pending">Pending</option>  ← TAMBAHKAN INI
+		  <option value="verified">Terverifikasi</option>
+		  <option value="in_progress">Sedang Diproses</option>
+		  <option value="completed">Selesai</option>
+		  <option value="skp_issue">Masalah SKP</option>
+		  <option value="needs_verification">Perlu Verifikasi</option>
+		  <option value="expiring_soon">SIP Expired</option>
+		  <option value="manual_check_required">Cek Manual</option>  ← TAMBAHKAN INI JUGA
+		</select>
+        </div>
+        <div class="form-group">
+          <label>Catatan Follow-up</label>
+          <textarea id="updateNotes" placeholder="Tambahkan catatan..."></textarea>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" class="btn" onclick="closeModal()" style="background: var(--border);">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal WhatsApp Template -->
+  <div class="modal" id="waModal">
+    <div class="modal-content">
+      <div class="modal-header"><h2>📱 Kirim Pesan WhatsApp</h2></div>
+      <div id="waLeadInfo" style="margin-bottom: 20px; padding: 16px; background: #F3F4F6; border-radius: 8px;"></div>
+      <h4 style="margin-bottom: 12px;">Pilih Template Pesan:</h4>
+      <div class="template-buttons">
+        <button type="button" class="template-btn" onclick="selectTemplate('welcome')"><strong>👋 Sambutan Awal</strong><small>Untuk lead baru yang belum direspon</small></button>
+        <button type="button" class="template-btn" onclick="selectTemplate('followup')"><strong>🔄 Follow-up (Belum Reply)</strong><small>Untuk lead yang sudah di-chat tapi belum balas</small></button>
+        <button type="button" class="template-btn" onclick="selectTemplate('urgent')"><strong>🚨 Urgent Reminder</strong><small>Untuk SIP yang mau expired &lt; 30 hari</small></button>
+        <button type="button" class="template-btn" onclick="selectTemplate('closing')"><strong>💰 Closing / Penawaran</strong><small>Untuk lead yang sudah tertarik</small></button>
+        <button type="button" class="template-btn" onclick="selectTemplate('custom')"><strong>✏️ Pesan Custom</strong><small>Tulis pesan sendiri</small></button>
+      </div>
+      <div class="form-group">
+        <label>Pesan WhatsApp:</label>
+        <textarea id="waMessage" rows="6"></textarea>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-success" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Kirim via WhatsApp</button>
+        <button type="button" class="btn" onclick="closeWaModal()" style="background: var(--border);">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pembayaran (BARU) -->
+  <div class="modal" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header"><h2>💳 Buat Invoice Pembayaran</h2></div>
+      <form id="paymentForm">
+        <input type="hidden" id="paymentLeadId">
+        <input type="hidden" id="paymentType">
+        <div class="form-group">
+          <label>Total Harga Paket (Rp)</label>
+          <input type="number" id="totalAmount" class="form-control" placeholder="Contoh: 3200000" required>
+          <small class="text-muted" style="color: var(--text-muted); font-size: 0.85rem;">Masukkan total harga kesepakatan. Sistem otomatis hitung 50% untuk DP.</small>
+        </div>
+        <div id="dpInfo" class="alert" style="display: none; background: #DBEAFE; color: #1E40AF; padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+          <strong>DP 50%:</strong> Rp <span id="dpAmount">0</span>
+        </div>
+        <div id="finalInfo" class="alert" style="display: none; background: #D1FAE5; color: #065F46; padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+          <strong>Sisa Pelunasan 50%:</strong> Rp <span id="finalAmount">0</span>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-link"></i> Generate Link Pembayaran</button>
+          <button type="button" class="btn" onclick="closePaymentModal()" style="background: var(--border);">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let leadsData = [];
+    let currentLead = null;
+
+    document.addEventListener('DOMContentLoaded', loadLeads);
+
+    async function loadLeads() {
+      try {
+        const response = await fetch('http://localhost:3000/api/leads');
+        const result = await response.json();
+        if (result.success) {
+          leadsData = result.leads;
+          renderTable(leadsData);
+          updateStats(leadsData);
+        }
+      } catch (error) {
+        console.error('Error loading leads:', error);
+      }
+    }
+
+    // HELPER FUNCTIONS BARU UNTUK PEMBAYARAN
+    function formatRupiah(amount) {
+      if (!amount) return '-';
+      return 'Rp ' + (amount / 1000000).toFixed(1) + ' jt';
+    }
+
+    function getPaymentBadge(status) {
+      const map = { 
+        'unpaid': 'pay-unpaid', 
+        'waiting_dp': 'pay-waiting', 
+        'dp_paid': 'pay-dp', 
+        'lunas': 'pay-lunas', 
+        'waiting_final': 'pay-waiting' 
+      };
+      return map[status] || 'pay-unpaid';
+    }
+
+    function formatPaymentStatus(status) {
+      const map = { 
+        'unpaid': 'Belum Bayar', 
+        'waiting_dp': 'Tunggu DP', 
+        'dp_paid': 'DP Lunas', 
+        'lunas': 'Lunas', 
+        'waiting_final': 'Tunggu Pelunasan' 
+      };
+      return map[status] || 'Belum Bayar';
+    }
+
+    function getPaymentButton(lead) {
+      if (lead.payment_status === 'unpaid' || lead.payment_status === 'waiting_dp') {
+        return `<button class="btn btn-warning btn-sm" onclick="openPaymentModal(${lead.id}, 'dp')" title="Buat Invoice DP"><i class="fas fa-file-invoice-dollar"></i> DP</button>`;
+      } else if (lead.payment_status === 'dp_paid' || lead.payment_status === 'waiting_final') {
+        return `<button class="btn btn-info btn-sm" onclick="openPaymentModal(${lead.id}, 'final')" title="Buat Invoice Pelunasan"><i class="fas fa-file-invoice"></i> Pelunasan</button>`;
+      }
+      return '';
+    }
+
+    function renderTable(leads) {
+      const tbody = document.getElementById('leadsTable');
+      if (leads.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align: center; padding: 40px;"><i class="fas fa-inbox"></i> Tidak ada data</td></tr>`;
+        return;
+      }
+
+      const now = new Date();
+      tbody.innerHTML = leads.map(lead => {
+        const lastUpdate = lead.last_follow_up ? new Date(lead.last_follow_up) : new Date(lead.created_at);
+        const daysSinceUpdate = Math.floor((now - lastUpdate) / (1000 * 60 * 60 * 24));
+        const needsFollowup = daysSinceUpdate > 3 && lead.status !== 'completed';
+        
+        const urgencyClass = lead.urgency === 'urgent' ? 'urgency-urgent' : lead.urgency === 'soon' ? 'urgency-soon' : 'urgency-normal';
+        const urgencyIcon = lead.urgency === 'urgent' ? '🔥' : lead.urgency === 'soon' ? '⚠️' : '✅';
+        
+        return `
+          <tr class="${needsFollowup ? 'needs-followup' : ''}">
+            <td><span class="urgency-badge ${urgencyClass}">${urgencyIcon} ${lead.urgency || 'normal'}</span></td>
+            <td>
+              ${new Date(lead.created_at).toLocaleDateString('id-ID')}
+              ${needsFollowup ? `<br><small style="color: var(--warning);"><i class="fas fa-clock"></i> ${daysSinceUpdate} hari</small>` : ''}
+            </td>
+            <td><strong>${lead.nama}</strong><br><small style="color: var(--text-muted);">NIK: ${lead.nik}</small></td>
+            <td>${lead.profesi}</td>
+            <td>${lead.str}</td>
+            <td><a href="https://wa.me/${lead.whatsapp}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i> ${lead.whatsapp}</a></td>
+            
+            <!-- KOLOM BARU: TOTAL & STATUS BAYAR -->
+            <td><strong>${formatRupiah(lead.total_amount)}</strong></td>
+            <td><span class="payment-badge ${getPaymentBadge(lead.payment_status)}">${formatPaymentStatus(lead.payment_status)}</span></td>
+            
+            <td><span class="status-badge status-${lead.status}">${formatStatus(lead.status)}</span></td>
+            <td>
+              <small>${lead.follow_up_count || 0}x</small>
+              ${lead.last_follow_up ? `<br><small style="color: var(--text-muted);">${new Date(lead.last_follow_up).toLocaleDateString('id-ID')}</small>` : ''}
+            </td>
+            <td>
+              ${lead.str_document ? `<a href="${lead.str_document}" target="_blank" class="document-link"><i class="fas fa-file-pdf"></i> STR</a>` : '-'}
+              ${lead.skp_document ? `<br><a href="${lead.skp_document}" target="_blank" class="document-link"><i class="fas fa-file-pdf"></i> SKP</a>` : ''}
+            </td>
+            <td>
+              <div class="actions">
+                <button class="btn btn-primary btn-sm" onclick="openUpdateModal(${lead.id}, '${lead.status}')" title="Update Status"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-success btn-sm" onclick="openWaModal(${lead.id})" title="Kirim WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                ${getPaymentButton(lead)}
+                <button class="btn btn-danger btn-sm" onclick="deleteLead(${lead.id}, '${lead.nama}')" title="Hapus Lead"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateStats(leads) {
+      document.getElementById('totalLeads').textContent = leads.length;
+      document.getElementById('urgentLeads').textContent = leads.filter(l => l.urgency === 'urgent').length;
+      document.getElementById('followupLeads').textContent = leads.filter(l => {
+        if (l.status === 'completed') return false;
+        const lastUpdate = l.last_follow_up ? new Date(l.last_follow_up) : new Date(l.created_at);
+        return Math.floor((new Date() - lastUpdate) / (1000 * 60 * 60 * 24)) > 3;
+      }).length;
+      document.getElementById('completedLeads').textContent = leads.filter(l => l.status === 'completed').length;
+    }
+
+    function formatStatus(status) {
+      const statuses = {
+        'new': 'Baru',
+		'pending': 'Pending',
+		'verified': 'Terverifikasi',
+		'in_progress': 'Sedang Diproses',
+        'completed': 'Selesai',
+		'skp_issue': 'Masalah SKP',
+		'needs_verification': 'Perlu Verifikasi',
+        'expiring_soon': 'SIP Expired',
+		'manual_check_required': 'Cek Manual'
+      };
+      return statuses[status] || status;
+    }
+
+    function openUpdateModal(id, currentStatus) {
+      document.getElementById('updateId').value = id;
+      document.getElementById('updateStatus').value = currentStatus;
+      document.getElementById('updateNotes').value = '';
+      document.getElementById('updateModal').classList.add('active');
+    }
+    function closeModal() { document.getElementById('updateModal').classList.remove('active'); }
+
+    document.getElementById('updateForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('updateId').value;
+      const status = document.getElementById('updateStatus').value;
+      const notes = document.getElementById('updateNotes').value;
+      try {
+        const response = await fetch(`http://localhost:3000/api/leads/${id}`, {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status, notes })
+        });
+        const result = await response.json();
+        if (result.success) { alert('Status berhasil diupdate!'); closeModal(); loadLeads(); } 
+        else { alert('Gagal update status'); }
+      } catch (error) { alert('Error: ' + error.message); }
+    });
+
+    function openWaModal(id) {
+      currentLead = leadsData.find(l => l.id === id);
+      if (!currentLead) return;
+      document.getElementById('waLeadInfo').innerHTML = `<strong>${currentLead.nama}</strong><br><small>Profesi: ${currentLead.profesi} | STR: ${currentLead.str}</small><br><small>WhatsApp: ${currentLead.whatsapp}</small>`;
+      document.getElementById('waMessage').value = '';
+      document.getElementById('waModal').classList.add('active');
+    }
+    function closeWaModal() { document.getElementById('waModal').classList.remove('active'); currentLead = null; }
+
+    function selectTemplate(type) {
+      const { nama, profesi, str } = currentLead;
+      const templates = {
+        welcome: `Halo ${nama} 👋\n\nTerima kasih sudah menghubungi MedLicensing.id!\n\nKami sudah menerima data Anda:\n• Nama: ${nama}\n• Profesi: ${profesi}\n• No. STR: ${str}\n\nTim verifikasi kami sedang mengecek data Anda. Kami akan menghubungi Anda dalam 1x24 jam.\n\nSalam,\nTim MedLicensing.id`,
+        followup: `Halo ${nama}, semoga sehat selalu 🙏\n\nKami ingin follow-up terkait pengurusan SIP/STR Anda. Apakah ada kendala atau pertanyaan yang bisa kami bantu?\n\nSalam hangat,\nTim MedLicensing.id`,
+        urgent: `Halo ${nama} 🚨\n\nKami notice bahwa SIP/STR Anda akan segera expired! Untuk menghindari masalah dalam praktik, kami sarankan segera mengurus perpanjangan.\n\nSalam,\nTim MedLicensing.id`,
+        closing: `Halo ${nama} 😊\n\nBerdasarkan verifikasi kami, dokumen Anda sudah lengkap dan bisa segera diproses dengan garansi.\n\nMau kami jelaskan detail biaya dan prosesnya?\n\nSalam,\nTim MedLicensing.id`,
+        custom: ''
+      };
+      document.getElementById('waMessage').value = templates[type] || '';
+    }
+
+    async function sendWhatsApp() {
+      const message = document.getElementById('waMessage').value;
+      if (!message.trim()) { alert('Pesan tidak boleh kosong!'); return; }
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+      btn.disabled = true;
+      try {
+        const response = await fetch(`http://localhost:3000/api/leads/${currentLead.id}/send-wa`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message })
+        });
+        const result = await response.json();
+        if (result.success) { alert('✅ Pesan berhasil terkirim!'); closeWaModal(); loadLeads(); } 
+        else { alert('❌ Gagal: ' + (result.message || 'Cek token Fonnte')); }
+      } catch (error) { alert('Error: ' + error.message); } 
+      finally { btn.innerHTML = originalText; btn.disabled = false; }
+    }
+
+    async function deleteLead(id, nama) {
+      if (!confirm(`Yakin mau hapus data "${nama}"?\n\nData yang dihapus tidak bisa dikembalikan!`)) return;
+      try {
+        const response = await fetch(`http://localhost:3000/api/leads/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (result.success) { alert('✅ Data berhasil dihapus!'); loadLeads(); } 
+        else { alert('❌ Gagal hapus: ' + result.message); }
+      } catch (error) { alert('❌ Error: ' + error.message); }
+    }
+
+    // ===== FUNGSI PEMBAYARAN BARU =====
+    function openPaymentModal(id, type) {
+      const lead = leadsData.find(l => l.id === id);
+      if (!lead) return;
+      
+      document.getElementById('paymentLeadId').value = id;
+      document.getElementById('paymentType').value = type;
+      document.getElementById('totalAmount').value = lead.total_amount || '';
+      
+      const dpInfo = document.getElementById('dpInfo');
+      const finalInfo = document.getElementById('finalInfo');
+      
+      if (type === 'dp') {
+        dpInfo.style.display = 'block';
+        finalInfo.style.display = 'none';
+      } else {
+        dpInfo.style.display = 'none';
+        finalInfo.style.display = 'block';
+      }
+      
+      // Trigger kalkulasi jika ada nilai
+      if (lead.total_amount) {
+        const total = parseInt(lead.total_amount);
+        document.getElementById('dpAmount').textContent = Math.round(total * 0.5).toLocaleString('id-ID');
+        document.getElementById('finalAmount').textContent = Math.round(total * 0.5).toLocaleString('id-ID');
+      }
+      
+      document.getElementById('paymentModal').classList.add('active');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('active');
+      document.getElementById('paymentForm').reset();
+    }
+
+    document.getElementById('totalAmount').addEventListener('input', function() {
+      const total = parseInt(this.value) || 0;
+      document.getElementById('dpAmount').textContent = Math.round(total * 0.5).toLocaleString('id-ID');
+      document.getElementById('finalAmount').textContent = Math.round(total * 0.5).toLocaleString('id-ID');
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const leadId = document.getElementById('paymentLeadId').value;
+      const type = document.getElementById('paymentType').value;
+      const totalAmount = parseInt(document.getElementById('totalAmount').value);
+      
+      if (!totalAmount || totalAmount <= 0) { alert('Total harga harus lebih dari 0'); return; }
+      
+      try {
+        const endpoint = type === 'dp' ? '/api/payment/create-dp' : '/api/payment/create-final';
+        const response = await fetch(`http://localhost:3000${endpoint}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ leadId, totalAmount })
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+          navigator.clipboard.writeText(result.data.paymentUrl);
+          alert(`✅ Link berhasil dibuat!\n\nLink: ${result.data.paymentUrl}\n\nLink sudah di-copy. Silakan kirim ke client via WhatsApp.`);
+          closePaymentModal();
+          loadLeads();
+        } else {
+          alert('❌ Error: ' + result.message + '\n\n(Pastikan Server Key Midtrans sudah diisi di .env)');
+        }
+      } catch (error) {
+        alert('❌ Error koneksi: ' + error.message);
+      }
+    });
+
+    // Search and filter
+    document.getElementById('searchInput').addEventListener('input', filterLeads);
+    document.getElementById('filterStatus').addEventListener('change', filterLeads);
+    document.getElementById('filterUrgency').addEventListener('change', filterLeads);
+
+    function filterLeads() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+      const urgencyFilter = document.getElementById('filterUrgency').value;
+      const filtered = leadsData.filter(lead => {
+        const matchSearch = lead.nama.toLowerCase().includes(search) || lead.nik.includes(search) || (lead.str && lead.str.toLowerCase().includes(search));
+        const matchStatus = !statusFilter || lead.status === statusFilter;
+        const matchUrgency = !urgencyFilter || lead.urgency === urgencyFilter;
+        return matchSearch && matchStatus && matchUrgency;
+      });
+      renderTable(filtered);
+    }
+
+    function logout() { if (confirm('Yakin ingin logout?')) window.location.href = '/'; }
+
+    document.getElementById('updateModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+    document.getElementById('waModal').addEventListener('click', function(e) { if (e.target === this) closeWaModal(); });
+    document.getElementById('paymentModal').addEventListener('click', function(e) { if (e.target === this) closePaymentModal(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedLicensing Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <i class="fas fa-heartbeat text-purple-600 text-5xl mb-4"></i>
+                <h1 class="text-3xl font-bold text-gray-800">MedLicensing</h1>
+                <p class="text-gray-600 mt-2">Admin Dashboard</p>
+            </div>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" id="loginEmail" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600"
+                        placeholder="admin@medlicensing.id" value="admin@medlicensing.id">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input type="password" id="loginPassword" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600"
+                        placeholder="••••••••" value="admin123">
+                </div>
+                <button type="submit" 
+                    class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                    Login
+                </button>
+                <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded-lg text-center"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard (hidden by default) -->
+    <div id="dashboardPage" class="hidden">
+        <!-- Sidebar -->
+        <div class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-heartbeat text-purple-400 mr-2"></i>
+                    MedLicensing
+                </h1>
+            </div>
+            <nav class="mt-6">
+                <a href="#" onclick="showSection('overview')" class="flex items-center px-6 py-3 hover:bg-gray-800 transition">
+                    <i class="fas fa-home mr-3"></i> Overview
+                </a>
+                <a href="#" onclick="showSection('crm')" class="flex items-center px-6 py-3 hover:bg-gray-800 transition">
+                    <i class="fas fa-users mr-3"></i> CRM
+                </a>
+                <a href="#" onclick="showSection('nakes')" class="flex items-center px-6 py-3 hover:bg-gray-800 transition">
+                    <i class="fas fa-database mr-3"></i> Database Nakes
+                </a>
+                <a href="#" onclick="logout()" class="flex items-center px-6 py-3 hover:bg-gray-800 transition mt-8 border-t border-gray-700">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="ml-64 p-8">
+            <!-- Overview Section -->
+            <div id="overviewSection">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Dashboard Overview</h2>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Leads</p>
+                                <p class="text-3xl font-bold text-gray-800" id="totalLeads">0</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-users text-purple-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Nakes</p>
+                                <p class="text-3xl font-bold text-gray-800" id="totalNakes">0</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-user-md text-blue-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Omset Bulan Ini</p>
+                                <p class="text-3xl font-bold text-gray-800" id="monthlyRevenue">Rp 0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-money-bill-wave text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">SIP Expired < 30 Hari</p>
+                                <p class="text-3xl font-bold text-gray-800" id="expiringSIP">0</p>
+                            </div>
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Leads by Status</h3>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Leads Trend (30 Hari)</h3>
+                        <canvas id="leadsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRM Section -->
+            <div id="crmSection" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">CRM - Lead Management</h2>
+                <div class="bg-white rounded-xl shadow p-6">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Nama</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Profesi</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">WhatsApp</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Eligible</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsTable" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Nakes Section -->
+            <div id="nakesSection" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Database Nakes Nasional</h2>
+                <div class="bg-white rounded-xl shadow p-6">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">NIK</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Nama</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Profesi</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">No STR</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">SIP Expired</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nakesTable" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let token = localStorage.getItem('token');
+
+        // Auto login kalau udah punya token
+        if (token) {
+            showDashboard();
+        }
+
+        // Login handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    token = data.token;
+                    localStorage.setItem('token', token);
+                    showDashboard();
+                } else {
+                    document.getElementById('loginError').textContent = data.message;
+                    document.getElementById('loginError').classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('loginError').textContent = 'Error: ' + error.message;
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/dashboard/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalLeads').textContent = data.stats.totalLeads;
+                    document.getElementById('totalNakes').textContent = data.stats.totalNakes;
+                    document.getElementById('expiringSIP').textContent = data.stats.expiringSIP;
+                    
+                    const currentMonth = data.stats.monthlyRevenue[0];
+                    const revenue = currentMonth ? currentMonth.revenue : 0;
+                    document.getElementById('monthlyRevenue').textContent = `Rp ${revenue.toLocaleString('id-ID')}`;
+                    
+                    loadCharts(data.stats.leadsByStatus);
+                    loadLeads();
+                    loadNakes();
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function loadCharts(leadsByStatus) {
+            // Status Chart
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: leadsByStatus.map(s => s.status),
+                    datasets: [{
+                        data: leadsByStatus.map(s => s.count),
+                        backgroundColor: ['#9333ea', '#3b82f6', '#10b981', '#f59e0b', '#ef4444']
+                    }]
+                }
+            });
+            
+            // Leads Trend Chart (dummy data untuk demo)
+            const ctx2 = document.getElementById('leadsChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['1', '5', '10', '15', '20', '25', '30'],
+                    datasets: [{
+                        label: 'Leads',
+                        data: [2, 5, 8, 12, 15, 20, 25],
+                        borderColor: '#9333ea',
+                        tension: 0.4
+                    }]
+                }
+            });
+        }
+
+        async function loadLeads() {
+            try {
+                const response = await fetch(`${API_URL}/leads`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tbody = document.getElementById('leadsTable');
+                    tbody.innerHTML = data.leads.map(lead => `
+                        <tr>
+                            <td class="px-4 py-3 text-sm">${lead.id}</td>
+                            <td class="px-4 py-3 text-sm">${lead.nama}</td>
+                            <td class="px-4 py-3 text-sm">${lead.profesi}</td>
+                            <td class="px-4 py-3 text-sm">${lead.whatsapp}</td>
+                            <td class="px-4 py-3 text-sm">
+                                <span class="px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">${lead.status}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                ${lead.eligible ? '<i class="fas fa-check-circle text-green-500"></i>' : '<i class="fas fa-times-circle text-red-500"></i>'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading leads:', error);
+            }
+        }
+
+        async function loadNakes() {
+            try {
+                const response = await fetch(`${API_URL}/nakes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tbody = document.getElementById('nakesTable');
+                    tbody.innerHTML = data.nakes.map(nakes => `
+                        <tr>
+                            <td class="px-4 py-3 text-sm">${nakes.nik}</td>
+                            <td class="px-4 py-3 text-sm">${nakes.nama}</td>
+                            <td class="px-4 py-3 text-sm">${nakes.profesi}</td>
+                            <td class="px-4 py-3 text-sm">${nakes.str_number || '-'}</td>
+                            <td class="px-4 py-3 text-sm">${nakes.sip_expiry_date || '-'}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading nakes:', error);
+            }
+        }
+
+        function showSection(section) {
+            document.getElementById('overviewSection').classList.add('hidden');
+            document.getElementById('crmSection').classList.add('hidden');
+            document.getElementById('nakesSection').classList.add('hidden');
+            document.getElementById(section + 'Section').classList.remove('hidden');
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

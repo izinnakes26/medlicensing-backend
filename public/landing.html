@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Jasa Pengurusan SIP, Izin Klinik & STR | MedLicensing.id</title>
+  <meta name="title" content="Jasa Urus SIP, STR & Izin Klinik Cepat | MedLicensing.id">
+  <meta name="description" content="Layanan profesional pengurusan SIP, Izin Klinik, dan STR untuk dokter. Proses cepat 14-21 hari, transparan, bergaransi.">
+  <meta name="keywords" content="jasa urus izin klinik, pengurusan SIP dokter, STR kesehatan, izin klinik pratama, izin klinik utama, konsultan perizinan medis">
+  <meta name="author" content="MedLicensing.id">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://izin-klinik.netlify.app/">
+  <meta property="og:title" content="Jasa Urus SIP, STR & Izin Klinik Cepat">
+  <meta property="og:description" content="Proses 14-21 hari, transparan, bergaransi. Konsultasi gratis!">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://izin-klinik.netlify.app/">
+  <meta property="twitter:title" content="Jasa Urus SIP, STR & Izin Klinik Cepat">
+  <meta property="twitter:description" content="Proses 14-21 hari, transparan, bergaransi. Konsultasi gratis!">
+  
+  <!-- Favicon & Canonical -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://izin-klinik.netlify.app/">
+  
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="kHSDkvM9wrqnzwThRL5d_MopLTKWu4e9zwEQYrvzkJw" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "MedLicensing.id - Jasa Pengurusan SIP, STR & Izin Klinik",
+    "description": "Layanan profesional pengurusan SIP, STR, dan izin klinik untuk dokter. Proses cepat 14-21 hari kerja, transparan, bergaransi.",
+    "url": "https://izin-klinik.netlify.app",
+    "telephone": "+62-812-3456-7890",
+    "priceRange": "Rp 1.500.000 - Rp 60.000.000",
+    "serviceType": ["Pengurusan SIP Dokter", "Pengurusan STR", "Izin Klinik Pratama", "Izin Klinik Utama"]
+  }
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #0B3D5C;
+      --secondary: #2A6F97;
+      --accent: #1B9AAA;
+      --bg: #FFFFFF;
+      --bg-alt: #F8FAFB;
+      --text: #1A1A1A;
+      --text-muted: #5A6A7A;
+      --border: #E2E8F0;
+      --shadow: 0 4px 12px rgba(11,61,92,0.08);
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fix input text color */
+    input[type="text"], input[type="tel"], input[type="email"], select, textarea {
+      color: #1A1A1A !important;
+      background-color: #fff !important;
+    }
+    input[type="text"]::placeholder, input[type="tel"]::placeholder, input[type="email"]::placeholder, textarea::placeholder {
+      color: #9CA3AF !important;
+    }
+    select, select option {
+      color: #1A1A1A !important;
+      background-color: #fff !important;
+    }
+
+    /* Fix agar scroll tidak ketutup header sticky */
+    #klien-kami, #cek-kelayakan, #pricing, #testimoni, #faq {
+      scroll-margin-top: 100px;
+    }
+
+    /* ===== UTILITY ===== */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .btn {
+      display: inline-block; padding: 14px 28px; background: var(--accent); color: #fff;
+      text-decoration: none; border-radius: 8px; font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(27,154,170,0.3); }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: #fff; }
+
+ /* ===== HEADER ===== */
+header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: rgba(255,255,255,0.98) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid var(--border) !important;
+  width: 100% !important;
+}
+
+header .container {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+}
+
+header nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 16px 0 !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+header .logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+  order: 1 !important;
+}
+
+header .logo-img {
+  height: 40px !important;
+  width: auto !important;
+  object-fit: contain !important;
+}
+
+header .logo span {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+  white-space: nowrap !important;
+}
+
+header .nav-links {
+  display: flex !important;
+  gap: 24px !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  order: 2 !important;
+}
+
+header .nav-links a {
+  text-decoration: none !important;
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  transition: color 0.2s !important;
+  white-space: nowrap !important;
+  padding: 8px 0 !important;
+}
+
+header .nav-links a:hover {
+  color: var(--primary) !important;
+}
+
+header .nav-links .btn {
+  padding: 10px 20px !important;
+  font-size: 0.9rem !important;
+  margin-left: 8px !important;
+}
+
+header .mobile-toggle {
+  display: none !important;
+  background: none !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  cursor: pointer !important;
+  color: var(--primary) !important;
+  padding: 8px !important;
+  order: 3 !important;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  header .nav-links {
+    display: none !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: white !important;
+    flex-direction: column !important;
+    padding: 20px !important;
+    gap: 16px !important;
+    border-bottom: 1px solid var(--border) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    order: unset !important;
+  }
+  
+  header .nav-links.active {
+    display: flex !important;
+  }
+  
+  header .nav-links a {
+    width: 100% !important;
+    padding: 12px !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+  }
+  
+  header .nav-links .btn {
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+  }
+  
+  header .mobile-toggle {
+    display: block !important;
+  }
+  
+  header .logo-img {
+    height: 35px !important;
+  }
+  
+  header .logo span {
+    font-size: 1.1rem !important;
+  }
+}
+
+    /* ===== SECTIONS ===== */
+    section { padding: 70px 0; }
+    .section-title { text-align: center; font-size: 1.75rem; margin-bottom: 12px; color: var(--primary); }
+    .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    #hero { padding: 80px 0 60px; text-align: center; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%); }
+    #hero h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; margin-bottom: 16px; color: var(--primary); }
+    #hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 640px; margin: 0 auto 32px; }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: box-shadow 0.2s, transform 0.2s; }
+    .card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+    .card-icon { width: 48px; height: 48px; background: rgba(42,111,151,0.1); border-radius: 10px; display: grid; place-items: center; margin-bottom: 16px; font-size: 1.5rem; }
+    .card h3 { margin-bottom: 8px; font-size: 1.15rem; }
+    .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    #pricing { background: var(--bg-alt); }
+    .price-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 24px; text-align: center; position: relative; }
+    .price-card.popular { border-color: var(--accent); box-shadow: 0 8px 24px rgba(27,154,170,0.15); }
+    .badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .price-card h3 { margin-bottom: 8px; }
+    .price { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin: 12px 0; }
+    .price span { font-size: 0.85rem; font-weight: 400; color: var(--text-muted); }
+    .features-list { list-style: none; margin: 20px 0 28px; text-align: left; }
+    .features-list li { padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; color: var(--text-muted); }
+    .features-list li:last-child { border-bottom: none; }
+    .price-tier { margin: 16px 0; text-align: left; }
+    .tier-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+    .tier-item:last-child { border-bottom: none; }
+    .tier-label { font-weight: 600; color: var(--text); }
+    .tier-price { font-weight: 700; color: var(--accent); font-size: 0.95rem; white-space: nowrap; }
+
+    #cek-kelayakan { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: #fff; }
+    #cek-kelayakan .section-title { color: #fff; }
+    #cek-kelayakan .section-sub { color: rgba(255,255,255,0.9); }
+    .form-card { background: #fff; border-radius: var(--radius); padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text); }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
+    .form-submit { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+    .form-submit:hover { transform: translateY(-2px); }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .testi-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+    .testi-card p { font-style: italic; margin-bottom: 16px; color: var(--text); }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--secondary); color: #fff; display: grid; place-items: center; font-weight: 600; }
+    .author-info div { font-weight: 600; }
+    .author-info small { color: var(--text-muted); }
+
+    #cta { text-align: center; background: var(--primary); color: #fff; padding: 60px 0; }
+    #cta h2 { margin-bottom: 12px; }
+    #cta p { opacity: 0.9; margin-bottom: 24px; max-width: 560px; margin-left: auto; margin-right: auto; }
+    #cta .btn { background: #fff; color: var(--primary); }
+    #cta .btn:hover { background: var(--bg-alt); }
+    
+    footer { text-align: center; padding: 24px 0; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: #fff; border-radius: 16px; padding: 40px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+    .faq-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; background: var(--bg); }
+    .faq-question { width: 100%; padding: 18px 24px; background: none; border: none; text-align: left; font-weight: 600; color: var(--text); font-size: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+    .faq-question:hover { background: var(--bg-alt); }
+    .faq-question::after { content: "+"; font-size: 1.25rem; color: var(--accent); font-weight: 300; }
+    .faq-item.active .faq-question::after { content: "−"; }
+    .faq-answer { max-height: 0; overflow: hidden; padding: 0 24px; color: var(--text-muted); line-height: 1.6; transition: max-height 0.3s ease, padding 0.3s ease; }
+    .faq-item.active .faq-answer { max-height: 300px; padding: 0 24px 18px; }
+    .faq-highlight { background: rgba(27,154,170,0.1); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+    @media (max-width: 768px) {
+      #hero { padding: 60px 0 40px; }
+      section { padding: 50px 0; }
+      .form-card { padding: 24px; }
+    }
+	
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+  <div class="container">
+    <nav>
+      <!-- Logo di KIRI -->
+      <a href="#" class="logo">
+        <img src="/logo.png" alt="MedLicensing.id" class="logo-img">
+        <span>MedLicensing.id</span>
+      </a>
+      
+      <!-- Menu Navigasi + Tombol CTA (di TENGAH desktop, dropdown di mobile) -->
+      <div class="nav-links">
+        <a href="#fitur">Fitur</a>
+        <a href="#cek-kelayakan">Cek Kelayakan</a>
+        <a href="#klien-kami">Klien Kami</a>
+        <a href="#pricing">Harga</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#faq">FAQ</a>
+        <a href="#cta" class="btn">Konsultasi Gratis</a>
+      </div>
+      
+      <!-- Tombol Hamburger (hanya muncul di mobile) -->
+      <button class="mobile-toggle" aria-label="Menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <h1>Urus SIP, Izin Klinik & STR<br>Tanpa Ribet & Transparan</h1>
+      <p>Dokter fokus menangani pasien. Biarkan tim ahli kami yang mengurusi berkas, verifikasi KKI, dan pengurusan ke Dinas Kesehatan hingga izin terbit.</p>
+      <div class="hero-cta">
+        <a href="https://wa.me/6281229098655?text=Halo,%20saya%20ingin%20konsultasi%20pengurusan%20izin%20praktik" class="btn">💬 Chat WhatsApp</a>
+        <a href="#cek-kelayakan" class="btn btn-outline">Cek Kelayakan SIP</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FITUR -->
+  <section id="fitur">
+    <div class="container">
+      <h2 class="section-title">Mengapa Memilih Kami?</h2>
+      <p class="section-sub">Kami memahami kompleksitas regulasi kesehatan. Layanan kami dirancang agar proses administratif Anda berjalan cepat, aman, dan tanpa tekanan.</p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>Proses Cepat & Terukur</h3>
+          <p>Timeline jelas dari pengumpulan berkas hingga terbitnya SIP/STR. Update progres real-time via dashboard atau WhatsApp.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👨‍⚕️</div>
+          <h3>Dikerjakan oleh Ahli Legal Medis</h3>
+          <p>Tim berpengalaman menangani ratusan pengurusan izin dokter, klinik, dan tenaga kesehatan lainnya di seluruh Indonesia.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <h3>Transparan & No Hidden Fees</h3>
+          <p>Biaya tetap di awal. Tidak ada biaya dadakan. Invoice resmi & kwitansi lengkap untuk keperluan akuntansi praktik Anda.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <h3>Garansi Sampai Terbit</h3>
+          <p>Jika proses gagal karena kelalaian kami, biaya layanan dikembalikan 100%. Kepuasan & legalitas adalah prioritas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CEK KELAYAKAN FORM (HANYA 1 FORM, TANPA UPLOAD) -->
+  <section id="cek-kelayakan">
+    <div class="container">
+      <h2 class="section-title">Cek Kelayakan SIP Gratis</h2>
+      <p class="section-sub">Verifikasi status SIP & STR Anda dalam hitungan detik. Tim kami akan menghubungi Anda dengan hasil verifikasi.</p>
+      
+      <div class="form-card">
+        <form id="checkForm">
+          <div class="form-group">
+            <label for="nama">Nama Lengkap</label>
+            <input type="text" id="nama" name="nama" required placeholder="dr. Nama Lengkap">
+          </div>
+          
+          <div class="form-group">
+            <label for="nik">NIK (KTP)</label>
+            <input type="text" id="nik" name="nik" required placeholder="16 digit NIK" maxlength="16">
+          </div>
+          
+          <div class="form-group">
+            <label for="str">No. STR</label>
+            <input type="text" id="str" name="str" required placeholder="Nomor STR">
+          </div>
+          
+          <div class="form-group">
+            <label for="profesi">Profesi</label>
+			<!-- Tambah Opsi Layanan -->
+			<div class="form-group">
+			<label for="layanan" class="form-label">Layanan yang Dibutuhkan</label>
+			<select id="layanan" class="form-control" required>
+			<option value="Pembuatan SIP Baru / Perpanjang SIP">Pembuatan SIP Baru / Perpanjang SIP</option>
+			<option value="Pendirian Klinik Baru">Pendirian Klinik Baru (Full Package)</option>
+			<option value="Izin Klinik Estetika/Gigi">Izin Klinik Estetika / Gigi</option>
+			<option value="Pengurusan SKP">Pengurusan Poin SKP</option>
+			<option value="Konsultasi RME & SatuSehat">Konsultasi RME & Integrasi SatuSehat</option>
+			</select>
+			</div>
+            <select id="profesi" name="profesi" required>
+              <option value="">Pilih Profesi</option>
+              <option value="dokter">Dokter Umum</option>
+              <option value="dokter_gigi">Dokter Gigi</option>
+              <option value="spesialis">Dokter Spesialis</option>
+              <option value="perawat">Perawat</option>
+              <option value="bidan">Bidan</option>
+              <option value="apoteker">Apoteker</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="whatsapp">Nomor WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" required placeholder="081234567890">
+          </div>
+
+          <div class="form-group">
+            <label for="urgency">Seberapa Urgent Pengurusan SIP Anda?</label>
+            <select id="urgency" name="urgency" required>
+              <option value="">-- Pilih Tingkat Urgency --</option>
+              <option value="urgent">🔥 Sangat Urgent (SIP Expired &lt; 30 hari)</option>
+              <option value="soon">⚠️ Segera (SIP Expired 30-90 hari)</option>
+              <option value="normal">✅ Normal (SIP Expired &gt; 90 hari)</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="form-submit">
+            <i class="fas fa-search mr-2"></i>Cek Kelayakan Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION KLIEN KAMI (DINAMIS DARI DATABASE) -->
+  <section id="klien-kami" style="background: var(--bg-alt);">
+    <div class="container">
+      <h2 class="section-title">Telah Dipercaya oleh Ratusan Tenaga Kesehatan</h2>
+      <p class="section-sub">Kami telah membantu pengurusan SIP, STR, dan izin klinik untuk dokter, perawat, bidan, dan tenaga kesehatan lainnya di seluruh Indonesia.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 48px;">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;" id="counterClients">23+</div>
+          <div style="color: var(--text-muted); font-size: 0.95rem;">Klien Terlayani</div>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">98%</div>
+          <div style="color: var(--text-muted); font-size: 0.95rem;">Tingkat Keberhasilan</div>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">14 Hari</div>
+          <div style="color: var(--text-muted); font-size: 0.95rem;">Rata-rata Proses</div>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">100%</div>
+          <div style="color: var(--text-muted); font-size: 0.95rem;">Garansi Terbit</div>
+        </div>
+      </div>
+      
+      <div style="background: white; padding: 32px; border-radius: var(--radius); box-shadow: var(--shadow);">
+        <h3 style="text-align: center; margin-bottom: 24px; color: var(--primary);">
+          <i class="fas fa-users"></i> Beberapa Klien yang Telah Kami Bantu
+        </h3>
+        <div id="clientsList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; max-height: 500px; overflow-y: auto; padding: 8px;">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+            <p>Memuat data klien...</p>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: 24px; color: var(--text-muted); font-size: 0.9rem;">
+          <i class="fas fa-info-circle"></i> Dan masih banyak tenaga kesehatan lainnya di seluruh Indonesia
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <h2 class="section-title">Paket Layanan & Harga</h2>
+      <p class="section-sub">Pilih paket sesuai kebutuhan. Semua paket termasuk pendampingan dokumen & follow-up ke instansi terkait.</p>
+      <div class="grid-3">
+        <div class="price-card">
+          <h3>Paket STR</h3>
+          <div class="price">Rp 1.500.000 <span>/proses</span></div>
+          <ul class="features-list">
+            <li>Verifikasi berkas STR online</li>
+            <li>Pendampingan upload KKI</li>
+            <li>Revisi dokumen tanpa batas</li>
+            <li>Update status via WhatsApp</li>
+          </ul>
+          <a href="https://wa.me/6281229098655?text=Halo,%20saya%20tertarik%20Paket%20STR" class="btn btn-outline">Pilih Paket</a>
+        </div>
+        <div class="price-card popular">
+          <div class="badge">Paling Diminati</div>
+          <h3>Paket SIP Dokter</h3>
+          <div class="price">Rp 3.200.000 <span>/izin</span></div>
+          <ul class="features-list">
+            <li>Termasuk verifikasi STR</li>
+            <li>Pengurusan ke Dinas Kesehatan</li>
+            <li>Penyesuaian lokasi praktik</li>
+            <li>Garansi terbit 14-21 hari kerja</li>
+            <li>Support prioritan 24/7</li>
+          </ul>
+          <a href="https://wa.me/6281229098655?text=Halo,%20saya%20tertarik%20Paket%20SIP%20Dokter" class="btn">Pilih Paket</a>
+        </div>
+        <div class="price-card">
+          <h3>Paket Izin Klinik</h3>
+          <div class="price-tier">
+            <div class="tier-item">
+              <span class="tier-label">Klinik Pratama</span>
+              <span class="tier-price">Rp 25 – 35 Juta</span>
+            </div>
+            <div class="tier-item">
+              <span class="tier-label">Klinik Utama</span>
+              <span class="tier-price">Rp 35 – 60 Juta+</span>
+            </div>
+          </div>
+          <ul class="features-list">
+            <li>Survey lokasi & rekomendasi teknis</li>
+            <li>Pengurusan IMB/PBG & SLF</li>
+            <li>Perizinan Dinkes & BPJS (opsional)</li>
+            <li>Pendampingan audit awal</li>
+          </ul>
+          <a href="https://wa.me/6281229098655?text=Halo,%20saya%20tertarik%20Paket%20Izin%20Klinik" class="btn btn-outline">Konsultasi Dulu</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <section id="testimoni">
+    <div class="container">
+      <h2 class="section-title">Dipercaya oleh Ratusan Dokter</h2>
+      <p class="section-sub">Kisah nyata dari rekan sejawat yang telah menyelesaikan perizinan praktik tanpa stres.</p>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p>"Awalnya bingung banget urus SIP pindah domisili. Tim MedLicensing sangat terstruktur, progres selalu diupdate, dan STR-SIP saya terbit dalam 16 hari kerja."</p>
+          <div class="testi-author">
+            <div class="avatar">DR</div>
+            <div class="author-info">
+              <div>dr. Rina Amelia</div>
+              <small>Dokter Umum, Surabaya</small>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <p>"Saya buka klinik kecil di pinggiran kota. Urus izinnya ternyata rumit, tapi paket klinik mereka sangat worth it. Semua legal, aman, dan saya bisa fokus ke pasien."</p>
+          <div class="testi-author">
+            <div class="avatar">DA</div>
+            <div class="author-info">
+              <div>dr. Andi Pratama, Sp.PD</div>
+              <small>Spesialis Penyakit Dalam, Bandung</small>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <p>"Respons cepat, dokumen dijaga kerahasiaannya, dan tidak ada biaya siluman. Recommended banget untuk dokter yang sibuk praktik."</p>
+          <div class="testi-author">
+            <div class="avatar">LS</div>
+            <div class="author-info">
+              <div>dr. Lia Safitri</div>
+              <small>Dokter Gigi, Jakarta Selatan</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="background: var(--bg-alt);">
+    <div class="container">
+      <h2 class="section-title">Pertanyaan Umum</h2>
+      <p class="section-sub">Jawaban transparan seputar perizinan, dokumen, & alur kerja kami.</p>
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="faq-item">
+          <button class="faq-question">Dokumen apa saja yang perlu disiapkan?</button>
+          <div class="faq-answer">Umumnya: Ijazah & transkrip, STR/KKI aktif, KTP, SKCK, Surat Keterangan Sehat, Pas foto terbaru, dan NPWP. Untuk Izin Klinik, tambahannya ada denah lokasi, sertifikat kepemilikan/sewa, & daftar tenaga kesehatan.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Berapa lama proses pengurusan sampai izin terbit?</button>
+          <div class="faq-answer">SIP & Perpanjang STR: <span class="faq-highlight">14–21 hari kerja</span>. Izin Klinik Pratama/Utama: <span class="faq-highlight">1–3 bulan</span> (tergantung jadwal verifikasi lapangan Dinkes).</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Apa bedanya Klinik Pratama dan Klinik Utama?</button>
+          <div class="faq-answer"><strong>Pratama:</strong> Layanan dasar, syarat fasilitas & SDM lebih ringan. <strong>Utama:</strong> Bisa rawat inap & layanan spesialis, wajib punya dokter penanggung jawab full-time.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Bagaimana jika STR saya expired atau dokumen belum lengkap?</button>
+          <div class="faq-answer">Kami bantu <span class="faq-highlight">review & arahkan</span> cara memperbarui STR, mengurus SKCK baru, atau melengkapi berkas yang kurang tanpa biaya tambahan.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Kenapa sistem kerjanya DP minimal 50% di awal?</button>
+          <div class="faq-answer">DP 50% digunakan untuk memulai proses resmi. Sisa 50% dilunasi <span class="faq-highlight">setelah izin terbit</span>. Sistem ini menjamin transparansi dan melindungi kedua belah pihak.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="container">
+      <h2>Siap Fokus Praktik, Bukan Birokrasi?</h2>
+      <p>Konsultasikan kebutuhan perizinan Anda. Tim kami akan memberikan estimasi waktu & biaya dalam 1x24 jam.</p>
+      <a href="https://wa.me/6281229098655?text=Halo,%20saya%20ingin%20konsultasi%20pengurusan%20izin%20praktik" class="btn">💬 Mulai Konsultasi via WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      © 2026 MedLicensing.id — Jasa Pengurusan Izin Praktik Kesehatan. Seluruh hak cipta dilindungi.
+    </div>
+  </footer>
+
+  <!-- MODAL HASIL CEK -->
+  <div id="resultModal" class="modal-overlay">
+    <div class="modal-content">
+      <div id="resultContent"></div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector('.mobile-toggle');
+    const nav = document.querySelector('.nav-links');
+    if(toggle) {
+      toggle.addEventListener('click', () => nav.classList.toggle('active'));
+    }
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => nav.classList.remove('active'));
+    });
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isActive = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        if(!isActive) item.classList.add('active');
+      });
+    });
+
+    // Form submission handler (LEAD GENERATION + AUTO REDIRECT)
+document.getElementById('checkForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  // Ambil data form
+  const formData = {
+    nama: document.getElementById('nama').value,
+    nik: document.getElementById('nik').value,
+    str: document.getElementById('str').value,
+    profesi: document.getElementById('profesi').value,
+	layanan: document.getElementById('layanan').value,
+    whatsapp: document.getElementById('whatsapp').value,
+    urgency: document.getElementById('urgency').value
+  };
+  
+  // Tampilkan loading
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
+  submitBtn.disabled = true;
+  
+  try {
+    // 1. Kirim data ke backend (simpan sebagai lead)
+    const response = await fetch('http://localhost:3000/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // 2. BUKA WEBSITE KKI DI TAB BARU (Ini kuncinya!)
+      window.open('https://www.kki.go.id/ceknamednakes/form', '_blank');
+      
+      // 3. Tampilkan pesan sukses sederhana
+      alert(`✅ Terima kasih ${formData.nama}!\n\nData Anda telah kami terima.\nSilakan cek status STR/SIP Anda di website KKI yang baru saja terbuka di tab baru.\n\nTim kami akan menghubungi Anda via WhatsApp untuk follow-up.`);
+      
+      // 4. Reset form
+      document.getElementById('checkForm').reset();
+    } else {
+      alert('❌ Error: ' + result.message);
+    }
+  } catch (error) {
+    alert('❌ Error koneksi ke server: ' + error.message);
+  } finally {
+    // Kembalikan tombol ke kondisi semula
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+  }
+});
+
+    function showResult(isEligible, nama, profesi, expiryDate, daysUntilExpiry, skpStatus, skpNotes, skpPoints, requiresSkp) {
+      const modal = document.getElementById('resultModal');
+      const content = document.getElementById('resultContent');
+      
+      if (requiresSkp && skpStatus === 'insufficient') {
+        content.innerHTML = `<div class="text-center"><div class="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-exclamation-triangle text-yellow-600 text-4xl"></i></div><h3 class="text-2xl font-bold text-gray-800 mb-4">SKP Belum Mencukupi</h3><p class="text-gray-600 mb-6">Mohon maaf ${nama}, SKP Anda belum mencukupi.</p><div class="space-y-3"><a href="https://wa.me/6281229098655?text=Halo%20saya%20${encodeURIComponent(nama)}%20mau%20konsultasi%20SKP" target="_blank" class="block w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition text-center"><i class="fab fa-whatsapp mr-2"></i>Konsultasi via WhatsApp</a><button onclick="closeModal()" class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Tutup</button></div></div>`;
+      } else if (isEligible) {
+        content.innerHTML = `<div class="text-center"><div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-check text-green-600 text-4xl"></i></div><h3 class="text-2xl font-bold text-gray-800 mb-4">SIP Anda LAYAK!</h3><p class="text-gray-600 mb-6">Selamat ${nama}, berdasarkan verifikasi kami, SIP Anda masih aktif.</p><button onclick="closeModal()" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition w-full">Mengerti</button></div>`;
+      } else {
+        content.innerHTML = `<div class="text-center"><div class="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-times text-red-600 text-4xl"></i></div><h3 class="text-2xl font-bold text-gray-800 mb-4">Perlu Diperpanjang</h3><p class="text-gray-600 mb-6">Mohon maaf ${nama}, SIP Anda perlu diperbarui.</p><div class="space-y-3"><a href="https://wa.me/6281229098655?text=Halo%20saya%20${encodeURIComponent(nama)}%20mau%20info%20perpanjangan%20SIP" target="_blank" class="block w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition text-center"><i class="fab fa-whatsapp mr-2"></i>Hubungi via WhatsApp</a><button onclick="closeModal()" class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Tutup</button></div></div>`;
+      }
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('resultModal').classList.remove('active');
+    }
+
+    // Fungsi untuk mengubah nama lengkap menjadi inisial (Aman UU PDP)
+    function maskName(fullName) {
+      if (!fullName) return '';
+      const normalized = fullName.replace(/\./g, ' ').trim();
+      const parts = normalized.split(/\s+/).filter(p => p.length > 0);
+      if (parts.length === 0) return '';
+      const titles = ['dr', 'drg', 'prof', 'professor', 'drh', 'ds', 'sp'];
+      const titleParts = [];
+      const nameParts = [];
+      for (const part of parts) {
+        if (titles.includes(part.toLowerCase()) && titleParts.length < 2) {
+          titleParts.push(part);
+        } else {
+          nameParts.push(part);
+        }
+      }
+      const title = titleParts.length > 0 ? titleParts.join('.') + '.' : '';
+      const initials = nameParts.map(word => word.charAt(0) + '.').join(' ');
+      return `${title} ${initials}`.trim();
+    }
+
+    async function loadPastClients() {
+      try {
+        const response = await fetch('/api/past-clients');
+        const result = await response.json();
+        if (result.success && result.clients.length > 0) {
+          document.getElementById('counterClients').textContent = result.total + '+';
+          document.getElementById('clientsList').innerHTML = result.clients.map(client => {
+            let icon = '‍⚕️';
+            if (client.profesi && client.profesi.toLowerCase().includes('gigi')) icon = '🦷';
+            if (client.profesi && client.profesi.toLowerCase().includes('perawat')) icon = '👩‍⚕️';
+            if (client.profesi && client.profesi.toLowerCase().includes('bidan')) icon = '🤱';
+            return `<div style="padding: 16px; background: var(--bg-alt); border-radius: 8px; border-left: 4px solid var(--accent); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'"><div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;"><div style="font-size: 1.5rem;">${icon}</div><div style="font-weight: 600; color: var(--text); font-size: 0.95rem;">${maskName(client.nama_dokter)}</div></div><div style="font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between;"><span>${client.profesi || 'Tenaga Kesehatan'}</span><span style="background: var(--accent); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">${client.tahun_pengurusan || '2024'}</span></div></div>`;
+          }).join('');
+        }
+      } catch (error) {
+        console.error('Error loading past clients:', error);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', loadPastClients);
+  </script>
+</body>
+</html>
