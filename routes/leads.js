@@ -62,8 +62,8 @@ router.post('/', async (req, res) => {
 
     // Cek apakah klien lama (auto-verify)
     const pastClientResult = await db.query(
-      'SELECT * FROM past_clients WHERE nama_dokter ILIKE $1 OR str_number = $2',
-      [`%${nama}%`, str]
+    'SELECT * FROM past_clients WHERE nama_dokter ILIKE $1 OR str ILIKE $2',
+    [`%${nama}%`, str]
     );
 
     let eligible = false;
