@@ -58,16 +58,15 @@
 
     .status-badge, .payment-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
     .status-new { background: #DBEAFE; color: #1E40AF; }
-	.status-pending { background: #F3F4F6; color: #4B5563; }
+    .status-pending { background: #F3F4F6; color: #4B5563; }
     .status-verified { background: #D1FAE5; color: #065F46; }
     .status-in_progress { background: #FEF3C7; color: #92400E; }
     .status-completed { background: #D1FAE5; color: #065F46; }
     .status-skp_issue { background: #FED7AA; color: #9A3412; }
     .status-needs_verification { background: #FEE2E2; color: #991B1B; }
     .status-expiring_soon { background: #FED7AA; color: #9A3412; }
-	.status-manual_check_required { background: #FEE2E2; color: #991B1B; }
+    .status-manual_check_required { background: #FEE2E2; color: #991B1B; }
 
-    /* BADGE PEMBAYARAN (BARU) */
     .pay-unpaid { background: #F3F4F6; color: #4B5563; }
     .pay-waiting { background: #FEF3C7; color: #92400E; }
     .pay-dp { background: #DBEAFE; color: #1E40AF; }
@@ -120,7 +119,6 @@
 </head>
 <body>
 
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <h2>⚕️ MedLicensing</h2>
@@ -133,14 +131,12 @@
     </nav>
   </aside>
 
-  <!-- Main Content -->
   <main class="main-content">
     <div class="page-header">
       <h1>Dashboard Leads</h1>
       <p>Kelola leads, verifikasi dokumen, dan tingkatkan closing rate</p>
     </div>
 
-    <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card"><h3>Total Leads</h3><div class="value" id="totalLeads">0</div></div>
       <div class="stat-card"><h3>🔥 Urgent (&lt; 30 hari)</h3><div class="value" id="urgentLeads" style="color: var(--danger);">0</div></div>
@@ -148,7 +144,6 @@
       <div class="stat-card"><h3>✅ Selesai</h3><div class="value" id="completedLeads" style="color: var(--success);">0</div></div>
     </div>
 
-    <!-- Verification Links -->
     <div class="verification-links">
       <h3 style="margin-bottom: 16px; color: var(--primary);"><i class="fas fa-external-link-alt"></i> Link Verifikasi Resmi</h3>
       <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.9rem;">Gunakan link berikut untuk verifikasi data STR/SIP secara manual:</p>
@@ -164,12 +159,12 @@
       </div>
     </div>
 
-    <!-- Filters -->
     <div class="filters">
       <input type="text" id="searchInput" placeholder="🔍 Cari nama, NIK, atau STR...">
       <select id="filterStatus">
         <option value="">Semua Status</option>
         <option value="new">Baru</option>
+        <option value="pending">Pending</option>
         <option value="verified">Terverifikasi</option>
         <option value="in_progress">Sedang Diproses</option>
         <option value="completed">Selesai</option>
@@ -185,7 +180,6 @@
       </select>
     </div>
 
-    <!-- Table -->
     <div class="table-container">
       <table>
         <thead>
@@ -205,11 +199,7 @@
           </tr>
         </thead>
         <tbody id="leadsTable">
-          <tr>
-            <td colspan="12" style="text-align: center; padding: 40px;">
-              <i class="fas fa-spinner fa-spin"></i> Loading...
-            </td>
-          </tr>
+          <tr><td colspan="12" style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -224,16 +214,16 @@
         <div class="form-group">
           <label>Status</label>
           <select id="updateStatus" required>
-		  <option value="new">Baru</option>
-		  <option value="pending">Pending</option>  ← TAMBAHKAN INI
-		  <option value="verified">Terverifikasi</option>
-		  <option value="in_progress">Sedang Diproses</option>
-		  <option value="completed">Selesai</option>
-		  <option value="skp_issue">Masalah SKP</option>
-		  <option value="needs_verification">Perlu Verifikasi</option>
-		  <option value="expiring_soon">SIP Expired</option>
-		  <option value="manual_check_required">Cek Manual</option>  ← TAMBAHKAN INI JUGA
-		</select>
+            <option value="new">Baru</option>
+            <option value="pending">Pending</option>
+            <option value="verified">Terverifikasi</option>
+            <option value="in_progress">Sedang Diproses</option>
+            <option value="completed">Selesai</option>
+            <option value="skp_issue">Masalah SKP</option>
+            <option value="needs_verification">Perlu Verifikasi</option>
+            <option value="expiring_soon">SIP Expired</option>
+            <option value="manual_check_required">Cek Manual</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Catatan Follow-up</label>
@@ -271,7 +261,7 @@
     </div>
   </div>
 
-  <!-- Modal Pembayaran (BARU) -->
+  <!-- Modal Pembayaran -->
   <div class="modal" id="paymentModal">
     <div class="modal-content">
       <div class="modal-header"><h2>💳 Buat Invoice Pembayaran</h2></div>
@@ -305,7 +295,8 @@
 
     async function loadLeads() {
       try {
-        const response = await fetch('https://medlicensing-backend.vercel.app/api/leads');
+        // PERBAIKAN: Gunakan relative URL
+        const response = await fetch('/api/leads');
         const result = await response.json();
         if (result.success) {
           leadsData = result.leads;
@@ -317,10 +308,9 @@
       }
     }
 
-    // HELPER FUNCTIONS BARU UNTUK PEMBAYARAN
     function formatRupiah(amount) {
       if (!amount) return '-';
-      return 'Rp ' + (amount / 1000000).toFixed(1) + ' jt';
+      return 'Rp ' + parseInt(amount).toLocaleString('id-ID');
     }
 
     function getPaymentBadge(status) {
@@ -377,12 +367,11 @@
               ${new Date(lead.created_at).toLocaleDateString('id-ID')}
               ${needsFollowup ? `<br><small style="color: var(--warning);"><i class="fas fa-clock"></i> ${daysSinceUpdate} hari</small>` : ''}
             </td>
-            <td><strong>${lead.nama}</strong><br><small style="color: var(--text-muted);">NIK: ${lead.nik}</small></td>
-            <td>${lead.profesi}</td>
-            <td>${lead.str}</td>
+            <td><strong>${lead.nama || lead.nama_dokter}</strong><br><small style="color: var(--text-muted);">NIK: ${lead.nik || '-'}</small></td>
+            <td>${lead.profesi || '-'}</td>
+            <td>${lead.str || '-'}</td>
             <td><a href="https://wa.me/${lead.whatsapp}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i> ${lead.whatsapp}</a></td>
             
-            <!-- KOLOM BARU: TOTAL & STATUS BAYAR -->
             <td><strong>${formatRupiah(lead.total_amount)}</strong></td>
             <td><span class="payment-badge ${getPaymentBadge(lead.payment_status)}">${formatPaymentStatus(lead.payment_status)}</span></td>
             
@@ -400,7 +389,7 @@
                 <button class="btn btn-primary btn-sm" onclick="openUpdateModal(${lead.id}, '${lead.status}')" title="Update Status"><i class="fas fa-edit"></i></button>
                 <button class="btn btn-success btn-sm" onclick="openWaModal(${lead.id})" title="Kirim WhatsApp"><i class="fab fa-whatsapp"></i></button>
                 ${getPaymentButton(lead)}
-                <button class="btn btn-danger btn-sm" onclick="deleteLead(${lead.id}, '${lead.nama}')" title="Hapus Lead"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-danger btn-sm" onclick="deleteLead(${lead.id}, '${lead.nama || lead.nama_dokter}')" title="Hapus Lead"><i class="fas fa-trash"></i></button>
               </div>
             </td>
           </tr>
@@ -421,15 +410,10 @@
 
     function formatStatus(status) {
       const statuses = {
-        'new': 'Baru',
-		'pending': 'Pending',
-		'verified': 'Terverifikasi',
-		'in_progress': 'Sedang Diproses',
-        'completed': 'Selesai',
-		'skp_issue': 'Masalah SKP',
-		'needs_verification': 'Perlu Verifikasi',
-        'expiring_soon': 'SIP Expired',
-		'manual_check_required': 'Cek Manual'
+        'new': 'Baru', 'pending': 'Pending', 'verified': 'Terverifikasi',
+        'in_progress': 'Sedang Diproses', 'completed': 'Selesai',
+        'skp_issue': 'Masalah SKP', 'needs_verification': 'Perlu Verifikasi',
+        'expiring_soon': 'SIP Expired', 'manual_check_required': 'Cek Manual'
       };
       return statuses[status] || status;
     }
@@ -448,7 +432,7 @@
       const status = document.getElementById('updateStatus').value;
       const notes = document.getElementById('updateNotes').value;
       try {
-        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${id}`, {
+        const response = await fetch(`/api/leads/${id}`, {
           method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status, notes })
         });
         const result = await response.json();
@@ -460,14 +444,15 @@
     function openWaModal(id) {
       currentLead = leadsData.find(l => l.id === id);
       if (!currentLead) return;
-      document.getElementById('waLeadInfo').innerHTML = `<strong>${currentLead.nama}</strong><br><small>Profesi: ${currentLead.profesi} | STR: ${currentLead.str}</small><br><small>WhatsApp: ${currentLead.whatsapp}</small>`;
+      document.getElementById('waLeadInfo').innerHTML = `<strong>${currentLead.nama || currentLead.nama_dokter}</strong><br><small>Profesi: ${currentLead.profesi} | STR: ${currentLead.str}</small><br><small>WhatsApp: ${currentLead.whatsapp}</small>`;
       document.getElementById('waMessage').value = '';
       document.getElementById('waModal').classList.add('active');
     }
     function closeWaModal() { document.getElementById('waModal').classList.remove('active'); currentLead = null; }
 
     function selectTemplate(type) {
-      const { nama, profesi, str } = currentLead;
+      const nama = currentLead.nama || currentLead.nama_dokter;
+      const { profesi, str } = currentLead;
       const templates = {
         welcome: `Halo ${nama} 👋\n\nTerima kasih sudah menghubungi MedLicensing.id!\n\nKami sudah menerima data Anda:\n• Nama: ${nama}\n• Profesi: ${profesi}\n• No. STR: ${str}\n\nTim verifikasi kami sedang mengecek data Anda. Kami akan menghubungi Anda dalam 1x24 jam.\n\nSalam,\nTim MedLicensing.id`,
         followup: `Halo ${nama}, semoga sehat selalu 🙏\n\nKami ingin follow-up terkait pengurusan SIP/STR Anda. Apakah ada kendala atau pertanyaan yang bisa kami bantu?\n\nSalam hangat,\nTim MedLicensing.id`,
@@ -486,7 +471,7 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
       btn.disabled = true;
       try {
-        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${currentLead.id}/send-wa`, {
+        const response = await fetch(`/api/leads/${currentLead.id}/send-wa`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message })
         });
         const result = await response.json();
@@ -499,14 +484,14 @@
     async function deleteLead(id, nama) {
       if (!confirm(`Yakin mau hapus data "${nama}"?\n\nData yang dihapus tidak bisa dikembalikan!`)) return;
       try {
-        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${id}`, { method: 'DELETE' });
+        const response = await fetch(`/api/leads/${id}`, { method: 'DELETE' });
         const result = await response.json();
         if (result.success) { alert('✅ Data berhasil dihapus!'); loadLeads(); } 
         else { alert('❌ Gagal hapus: ' + result.message); }
       } catch (error) { alert('❌ Error: ' + error.message); }
     }
 
-    // ===== FUNGSI PEMBAYARAN BARU =====
+    // ===== FUNGSI PEMBAYARAN =====
     function openPaymentModal(id, type) {
       const lead = leadsData.find(l => l.id === id);
       if (!lead) return;
@@ -526,7 +511,6 @@
         finalInfo.style.display = 'block';
       }
       
-      // Trigger kalkulasi jika ada nilai
       if (lead.total_amount) {
         const total = parseInt(lead.total_amount);
         document.getElementById('dpAmount').textContent = Math.round(total * 0.5).toLocaleString('id-ID');
@@ -557,7 +541,8 @@
       
       try {
         const endpoint = type === 'dp' ? '/api/payment/create-dp' : '/api/payment/create-final';
-        const response = await fetch(`https://medlicensing-backend.vercel.app${endpoint}`, {
+        // PERBAIKAN: Gunakan relative URL
+        const response = await fetch(endpoint, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ leadId, totalAmount })
         });
         const result = await response.json();
@@ -568,14 +553,13 @@
           closePaymentModal();
           loadLeads();
         } else {
-          alert('❌ Error: ' + result.message + '\n\n(Pastikan Server Key Midtrans sudah diisi di .env)');
+          alert('❌ Error: ' + result.message + '\n\n(Pastikan Server Key Midtrans sudah diisi di Environment Variables Vercel)');
         }
       } catch (error) {
         alert('❌ Error koneksi: ' + error.message);
       }
     });
 
-    // Search and filter
     document.getElementById('searchInput').addEventListener('input', filterLeads);
     document.getElementById('filterStatus').addEventListener('change', filterLeads);
     document.getElementById('filterUrgency').addEventListener('change', filterLeads);
@@ -585,7 +569,8 @@
       const statusFilter = document.getElementById('filterStatus').value;
       const urgencyFilter = document.getElementById('filterUrgency').value;
       const filtered = leadsData.filter(lead => {
-        const matchSearch = lead.nama.toLowerCase().includes(search) || lead.nik.includes(search) || (lead.str && lead.str.toLowerCase().includes(search));
+        const nama = (lead.nama || lead.nama_dokter || '').toLowerCase();
+        const matchSearch = nama.includes(search) || (lead.nik && lead.nik.includes(search)) || (lead.str && lead.str.toLowerCase().includes(search));
         const matchStatus = !statusFilter || lead.status === statusFilter;
         const matchUrgency = !urgencyFilter || lead.urgency === urgencyFilter;
         return matchSearch && matchStatus && matchUrgency;
