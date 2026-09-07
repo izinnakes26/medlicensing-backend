@@ -6,6 +6,7 @@ const leadsRoutes = require('./routes/leads');
 const paymentRoutes = require('./routes/payment');
 const dashboardRoutes = require('./routes/dashboard');
 const db = require('./config/database');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -17,8 +18,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 // ===== ROUTES API =====
+app.use('/api/auth', authRoutes);           // ← TAMBAH INI!
 app.use('/api/leads', leadsRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
