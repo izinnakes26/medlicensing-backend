@@ -305,7 +305,7 @@
 
     async function loadLeads() {
       try {
-        const response = await fetch('http://localhost:3000/api/leads');
+        const response = await fetch('https://medlicensing-backend.vercel.app/api/leads');
         const result = await response.json();
         if (result.success) {
           leadsData = result.leads;
@@ -448,7 +448,7 @@
       const status = document.getElementById('updateStatus').value;
       const notes = document.getElementById('updateNotes').value;
       try {
-        const response = await fetch(`http://localhost:3000/api/leads/${id}`, {
+        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${id}`, {
           method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status, notes })
         });
         const result = await response.json();
@@ -486,7 +486,7 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
       btn.disabled = true;
       try {
-        const response = await fetch(`http://localhost:3000/api/leads/${currentLead.id}/send-wa`, {
+        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${currentLead.id}/send-wa`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message })
         });
         const result = await response.json();
@@ -499,7 +499,7 @@
     async function deleteLead(id, nama) {
       if (!confirm(`Yakin mau hapus data "${nama}"?\n\nData yang dihapus tidak bisa dikembalikan!`)) return;
       try {
-        const response = await fetch(`http://localhost:3000/api/leads/${id}`, { method: 'DELETE' });
+        const response = await fetch(`https://medlicensing-backend.vercel.app/api/leads/${id}`, { method: 'DELETE' });
         const result = await response.json();
         if (result.success) { alert('✅ Data berhasil dihapus!'); loadLeads(); } 
         else { alert('❌ Gagal hapus: ' + result.message); }
@@ -557,7 +557,7 @@
       
       try {
         const endpoint = type === 'dp' ? '/api/payment/create-dp' : '/api/payment/create-final';
-        const response = await fetch(`http://localhost:3000${endpoint}`, {
+        const response = await fetch(`https://medlicensing-backend.vercel.app${endpoint}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ leadId, totalAmount })
         });
         const result = await response.json();
