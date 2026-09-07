@@ -695,7 +695,7 @@ document.getElementById('checkForm').addEventListener('submit', async function(e
   
   try {
     // 1. Kirim data ke backend (simpan sebagai lead)
-    const response = await fetch('http://localhost:3000/api/leads', {
+    const response = await fetch('https://medlicensing-backend.vercel.app/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
