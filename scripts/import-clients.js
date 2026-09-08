@@ -1,19 +1,20 @@
 const fs = require('fs');
 const path = require('path');
-const { Pool } = require('pg');
-
-// URL Neon LENGKAP (ganti dengan URL lo yang asli)
-const DATABASE_URL = 'postgresql://neondb_owner:npg_8BdZWq0TzObx@ep-cold-frost-azvinfsl-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
-
-const db = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const { Client } = require('pg');
+require('dotenv').config();
 
 async function importClients() {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+
   try {
+    await client.connect();
+    console.log('✅ Connected to database!');
+    
     const csvPath = path.join(__dirname, '..', 'import_clients.csv');
     
     if (!fs.existsSync(csvPath)) {
@@ -37,7 +38,7 @@ async function importClients() {
       if (!nama || !nama.trim()) continue;
       
       try {
-        const existing = await db.query(
+        const existing = await client.query(
           'SELECT id FROM past_clients WHERE nama_dokter ILIKE $1',
           [nama.trim()]
         );
@@ -48,7 +49,7 @@ async function importClients() {
           continue;
         }
         
-        await db.query(
+        await client.query(
           `INSERT INTO past_clients (nama_dokter, profesi, str_number, tahun_pengurusan, jenis_layanan, status)
            VALUES ($1, $2, $3, $4, $5, 'completed')`,
           [
@@ -70,18 +71,18 @@ async function importClients() {
     
     console.log(`\n========== IMPORT SELESAI ==========`);
     console.log(`✅ Imported: ${imported}`);
-    console.log(`⏭️  Skipped: ${skipped}`);
+    console.log(`️  Skipped: ${skipped}`);
     console.log(`❌ Errors: ${errors}`);
     
-    const total = await db.query('SELECT COUNT(*) FROM past_clients');
-    console.log(`📊 Total clients in database: ${total.rows[0].count}`);
+    const total = await client.query('SELECT COUNT(*) FROM past_clients');
+    console.log(` Total clients in database: ${total.rows[0].count}`);
     console.log(`=====================================\n`);
     
-    await db.end();
+    await client.end();
     process.exit(0);
   } catch (error) {
     console.error('💀 Fatal error:', error.message);
-    await db.end();
+    await client.end();
     process.exit(1);
   }
 }
