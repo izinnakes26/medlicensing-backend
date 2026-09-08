@@ -1,6 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const db = require('../config/database');
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 require('dotenv').config();
 // OVERRIDE DATABASE_URL dengan URL Neon
 process.env.DATABASE_URL = 'postgresql://neondb_owner:npg_8BdZWq0TzObx@ep-cold-frost-azvinfsl-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
