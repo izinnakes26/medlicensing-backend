@@ -6,7 +6,9 @@ require('dotenv').config();
 async function importClients() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
-    ssl: false
+    ssl: {
+    rejectUnauthorized: false
+  }
     
   });
 
