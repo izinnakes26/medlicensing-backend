@@ -1,17 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
-require('dotenv').config();
+
+// URL Neon LENGKAP (ganti dengan URL lo yang asli)
+const DATABASE_URL = 'postgresql://neondb_owner:npg_8BdZWq0TzObx@ep-cold-frost-azvinfsl-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 const db = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
-require('dotenv').config();
-// OVERRIDE DATABASE_URL dengan URL Neon
-process.env.DATABASE_URL = 'postgresql://neondb_owner:npg_8BdZWq0TzObx@ep-cold-frost-azvinfsl-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 async function importClients() {
   try {
@@ -19,14 +18,11 @@ async function importClients() {
     
     if (!fs.existsSync(csvPath)) {
       console.error('ERROR: File import_clients.csv tidak ditemukan!');
-      console.error('Lokasi yang dicari:', csvPath);
       process.exit(1);
     }
     
     const csvData = fs.readFileSync(csvPath, 'utf8');
     const lines = csvData.split('\n').filter(line => line.trim());
-    
-    // Skip header
     const dataLines = lines.slice(1);
     
     console.log(`Importing ${dataLines.length} clients...`);
@@ -41,7 +37,6 @@ async function importClients() {
       if (!nama || !nama.trim()) continue;
       
       try {
-        // Cek apakah sudah ada
         const existing = await db.query(
           'SELECT id FROM past_clients WHERE nama_dokter ILIKE $1',
           [nama.trim()]
@@ -53,7 +48,6 @@ async function importClients() {
           continue;
         }
         
-        // Insert ke database
         await db.query(
           `INSERT INTO past_clients (nama_dokter, profesi, str_number, tahun_pengurusan, jenis_layanan, status)
            VALUES ($1, $2, $3, $4, $5, 'completed')`,
@@ -79,15 +73,15 @@ async function importClients() {
     console.log(`⏭️  Skipped: ${skipped}`);
     console.log(`❌ Errors: ${errors}`);
     
-    // Hitung total
     const total = await db.query('SELECT COUNT(*) FROM past_clients');
     console.log(`📊 Total clients in database: ${total.rows[0].count}`);
     console.log(`=====================================\n`);
     
+    await db.end();
     process.exit(0);
   } catch (error) {
     console.error('💀 Fatal error:', error.message);
-    console.error(error.stack);
+    await db.end();
     process.exit(1);
   }
 }
