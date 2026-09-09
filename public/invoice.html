@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Pembayaran - Medlicensing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+        <!-- Header -->
+        <div class="bg-blue-900 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold mb-2">INVOICE PEMBAYARAN</h1>
+            <p class="text-blue-200 text-sm">Medlicensing Indonesia</p>
+        </div>
+
+        <!-- Detail -->
+        <div class="p-6 space-y-4">
+            <div class="flex justify-between border-b pb-3">
+                <span class="text-gray-600">Nama Klien</span>
+                <span class="font-semibold text-gray-800" id="clientName">Loading...</span>
+            </div>
+            <div class="flex justify-between border-b pb-3">
+                <span class="text-gray-600">Layanan</span>
+                <span class="font-semibold text-gray-800" id="serviceType">Loading...</span>
+            </div>
+            <div class="flex justify-between items-center pt-2">
+                <span class="text-gray-800 font-bold text-lg">Total Tagihan</span>
+                <span class="text-blue-900 font-bold text-2xl" id="totalPrice">Rp 0</span>
+            </div>
+        </div>
+
+        <!-- QRIS Section -->
+        <div class="px-6 pb-6">
+            <div class="bg-gray-100 rounded-xl p-4 text-center border-2 border-dashed border-gray-300">
+                <p class="text-sm text-gray-600 mb-3 font-semibold">Scan QRIS untuk membayar</p>
+                <img src="/qris.jpg" alt="QRIS Code" class="w-48 h-48 mx-auto rounded-lg shadow-sm object-contain bg-white">
+                <p class="text-xs text-gray-500 mt-3">DANA / ShopeePay / OVO / Mobile Banking</p>
+            </div>
+        </div>
+
+        <!-- Confirm Button -->
+        <div class="px-6 pb-6">
+            <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
+                <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
+            </a>
+            <p class="text-xs text-center text-gray-500 mt-3">Kirim bukti transfer via WhatsApp untuk proses cepat.</p>
+        </div>
+    </div>
+
+    <script>
+        // Ambil data dari URL (contoh: /invoice.html?name=Budi&service=SIP&price=1500000)
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || 'Klien';
+        const service = params.get('service') || 'Layanan';
+        const price = params.get('price') || '0';
+
+        document.getElementById('clientName').innerText = name;
+        document.getElementById('serviceType').innerText = service;
+        document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
+
+        // Link WA (GANTI NOMOR WA LO DI SINI - pakai format 628xxx)
+        const waNumber = '6281234567890'; 
+        const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
+        document.getElementById('waButton').href = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    </script>
+</body>
+</html>
