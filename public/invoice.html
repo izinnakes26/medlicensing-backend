@@ -61,7 +61,7 @@
         document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
 
         // Link WA (GANTI NOMOR WA LO DI SINI - pakai format 628xxx)
-        const waNumber = '6281234567890'; 
+        const waNumber = '6281229098655'; 
         const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
         document.getElementById('waButton').href = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
     </script>
