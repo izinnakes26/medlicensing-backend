@@ -64,4 +64,67 @@
     </div>
     <!-- AKHIR AREA PDF -->
 
-    <!--
+    <!-- TOMBOL AKSI (TIDAK IKUT TERCETAK DI PDF) -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex flex-col gap-3 max-w-md mx-auto rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
+        <button onclick="downloadPDF()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg flex justify-center items-center">
+            <i class="fas fa-file-pdf mr-2"></i> Download Invoice PDF
+        </button>
+        <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
+            <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
+        </a>
+    </div>
+
+    <script>
+        // 1. Ambil data dari URL
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || 'Klien';
+        const service = params.get('service') || 'Layanan';
+        const price = params.get('price') || '0';
+
+        document.getElementById('clientName').innerText = name;
+        document.getElementById('serviceType').innerText = service;
+        document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
+
+        // 2. Link WA (GANTI NOMOR WA ADMIN DI SINI)
+        const waAdmin = '6281229098655'; // <-- GANTI DENGAN NOMOR WA LO
+        const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
+        document.getElementById('waButton').href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(message)}`;
+
+        // 3. Fungsi Copy Rekening
+        function copyRek(nomor, bank) {
+            navigator.clipboard.writeText(nomor).then(() => {
+                const feedback = document.getElementById(`feedback-${bank}`);
+                feedback.classList.remove('hidden');
+                setTimeout(() => feedback.classList.add('hidden'), 2500);
+            }).catch(err => {
+                alert('Gagal menyalin, silakan copy manual: ' + nomor);
+            });
+        }
+
+        // 4. Fungsi Download PDF
+        function downloadPDF() {
+            const element = document.getElementById('invoice-content');
+            const namaClient = document.getElementById('clientName').innerText.replace(/\s+/g, '_');
+            
+            const opt = {
+                margin: 10,
+                filename: `Invoice_Medlicensing_${namaClient}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Ubah teks tombol saat proses
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+            btn.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
