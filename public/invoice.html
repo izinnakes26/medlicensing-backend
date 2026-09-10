@@ -31,23 +31,29 @@
             </div>
         </div>
 
-        <!-- QRIS Section -->
-        <div class="px-6 pb-6">
-            <div class="bg-gray-100 rounded-xl p-4 text-center border-2 border-dashed border-gray-300">
-                <p class="text-sm text-gray-600 mb-3 font-semibold">Scan QRIS untuk membayar</p>
-                <img src="/qris.jpg" alt="QRIS Code" class="w-48 h-48 mx-auto rounded-lg shadow-sm object-contain bg-white">
-                <p class="text-xs text-gray-500 mt-3">DANA / ShopeePay / OVO / Mobile Banking</p>
-            </div>
+        <!-- Ganti bagian QRIS Section dengan ini -->
+<div class="px-6 pb-6">
+    <div class="bg-blue-50 rounded-xl p-6 text-center border-2 border-blue-200">
+        <p class="text-sm text-blue-800 mb-4 font-bold">Transfer ke Rekening:</p>
+        
+        <div class="bg-white rounded-lg p-4 mb-3">
+            <p class="text-xs text-gray-500 mb-1">Bank</p>
+            <p class="text-lg font-bold text-gray-800">BCA</p>
         </div>
-
-        <!-- Confirm Button -->
-        <div class="px-6 pb-6">
-            <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
-                <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
-            </a>
-            <p class="text-xs text-center text-gray-500 mt-3">Kirim bukti transfer via WhatsApp untuk proses cepat.</p>
+        
+        <div class="bg-white rounded-lg p-4 mb-3">
+            <p class="text-xs text-gray-500 mb-1">Nomor Rekening</p>
+            <p class="text-xl font-bold text-blue-900 select-all">1234567890</p>
         </div>
+        
+        <div class="bg-white rounded-lg p-4">
+            <p class="text-xs text-gray-500 mb-1">Atas Nama</p>
+            <p class="text-sm font-semibold text-gray-700">PT/CV Medlicensing</p>
+        </div>
+        
+        <p class="text-xs text-gray-500 mt-4 italic">*Konfirmasi via WhatsApp setelah transfer</p>
     </div>
+</div>
 
     <script>
         // Ambil data dari URL (contoh: /invoice.html?name=Budi&service=SIP&price=1500000)
