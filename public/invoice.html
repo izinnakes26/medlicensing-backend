@@ -6,29 +6,9 @@
     <title>Invoice Pembayaran - Medlicensing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- CSS Khusus Print/PDF -->
-    <style>
-        @media print {
-            body {
-                background: white !important;
-                padding: 0 !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            #invoice-content {
-                box-shadow: none !important;
-                max-width: 100% !important;
-                border-radius: 0 !important;
-            }
-        }
-    </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-    
-    <!-- AREA INVOICE -->
-    <div id="invoice-content" class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
         <!-- Header -->
         <div class="bg-blue-900 p-6 text-white text-center">
             <h1 class="text-2xl font-bold mb-2">INVOICE PEMBAYARAN</h1>
@@ -51,42 +31,42 @@
             </div>
         </div>
 
-        <!-- Bagian Rekening -->
+        <!-- Bagian Rekening (BCA & BRI) -->
         <div class="px-6 pb-6">
             <p class="text-sm text-gray-700 font-bold mb-3 text-center">Silakan transfer ke salah satu rekening berikut:</p>
             
-            <!-- BCA -->
-            <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-3 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('2910939346', 'bca')">
+            <!-- KOTAK BCA -->
+            <!-- GANTI NOMOR REKENING BCA DI BAWAH INI (ada 2 tempat: di onclick dan di teks) -->
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-3 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('1234567890', 'bca')">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-bold text-blue-800">BANK BCA</span>
                     <i class="fas fa-copy text-blue-400"></i>
                 </div>
                 <p class="text-xl font-bold text-gray-800 tracking-wider" id="norek-bca">2910939346</p>
-                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p>
+                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p> <!-- GANTI NAMA PEMILIK REK BCA -->
                 <p id="feedback-bca" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor BCA berhasil disalin!</p>
             </div>
 
-            <!-- BRI -->
-            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('041901056134503', 'bri')">
+            <!-- KOTAK BRI -->
+            <!-- GANTI NOMOR REKENING BRI DI BAWAH INI (ada 2 tempat: di onclick dan di teks) -->
+            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('0987654321', 'bri')">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-bold text-orange-800">BANK BRI</span>
                     <i class="fas fa-copy text-orange-400"></i>
                 </div>
                 <p class="text-xl font-bold text-gray-800 tracking-wider" id="norek-bri">041901056134503</p>
-                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p>
+                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p> <!-- GANTI NAMA PEMILIK REK BRI -->
                 <p id="feedback-bri" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor BRI berhasil disalin!</p>
             </div>
         </div>
-    </div>
 
-    <!-- TOMBOL AKSI (TIDAK IKUT TERCETAK) -->
-    <div class="no-print fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex flex-col gap-3 max-w-md mx-auto rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
-        <button onclick="downloadPDF()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg flex justify-center items-center">
-            <i class="fas fa-file-pdf mr-2"></i> Download Invoice PDF
-        </button>
-        <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
-            <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
-        </a>
+        <!-- Tombol Konfirmasi WA -->
+        <div class="px-6 pb-8">
+            <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
+                <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
+            </a>
+            <p class="text-xs text-center text-gray-500 mt-3">Kirim bukti transfer via WhatsApp untuk proses cepat.</p>
+        </div>
     </div>
 
     <script>
@@ -101,11 +81,11 @@
         document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
 
         // 2. Link WA (GANTI NOMOR WA ADMIN DI SINI)
-        const waAdmin = '628129098655'; // <-- GANTI DENGAN NOMOR WA LO
+        const waAdmin = '6281229098655'; 
         const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
         document.getElementById('waButton').href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(message)}`;
 
-        // 3. Fungsi Copy Rekening
+        // 3. Fungsi Copy Rekening (Bisa untuk BCA & BRI)
         function copyRek(nomor, bank) {
             navigator.clipboard.writeText(nomor).then(() => {
                 const feedback = document.getElementById(`feedback-${bank}`);
@@ -114,11 +94,6 @@
             }).catch(err => {
                 alert('Gagal menyalin, silakan copy manual: ' + nomor);
             });
-        }
-
-        // 4. Fungsi Download PDF (Pakai window.print)
-        function downloadPDF() {
-            window.print();
         }
     </script>
 </body>
