@@ -19,11 +19,11 @@
         <div class="p-6 space-y-4">
             <div class="flex justify-between border-b pb-3">
                 <span class="text-gray-600">Nama Klien</span>
-                <span class="font-semibold text-gray-800" id="clientName">Loading...</span>
+                <span class="font-semibold text-gray-800 text-right" id="clientName">Loading...</span>
             </div>
             <div class="flex justify-between border-b pb-3">
                 <span class="text-gray-600">Layanan</span>
-                <span class="font-semibold text-gray-800" id="serviceType">Loading...</span>
+                <span class="font-semibold text-gray-800 text-right" id="serviceType">Loading...</span>
             </div>
             <div class="flex justify-between items-center pt-2">
                 <span class="text-gray-800 font-bold text-lg">Total Tagihan</span>
@@ -31,32 +31,46 @@
             </div>
         </div>
 
-        <!-- Ganti bagian QRIS Section dengan ini -->
-<div class="px-6 pb-6">
-    <div class="bg-blue-50 rounded-xl p-6 text-center border-2 border-blue-200">
-        <p class="text-sm text-blue-800 mb-4 font-bold">Transfer ke Rekening:</p>
-        
-        <div class="bg-white rounded-lg p-4 mb-3">
-            <p class="text-xs text-gray-500 mb-1">Bank</p>
-            <p class="text-lg font-bold text-gray-800">BCA</p>
+        <!-- Rekening Section (CLICK TO COPY) -->
+        <div class="px-6 pb-6">
+            <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-100">
+                <p class="text-sm text-blue-800 mb-4 font-bold text-center">Transfer ke Rekening:</p>
+                
+                <div class="bg-white rounded-lg p-4 mb-3 shadow-sm">
+                    <p class="text-xs text-gray-500 mb-1">Bank</p>
+                    <p class="text-lg font-bold text-gray-800">BCA</p>
+                </div>
+                
+                <!-- Tombol Salin Rekening -->
+                <div class="bg-white rounded-lg p-4 shadow-sm cursor-pointer active:scale-95 transition-transform" onclick="copyRek()">
+                    <p class="text-xs text-gray-500 mb-1">Nomor Rekening (Klik untuk salin)</p>
+                    <div class="flex justify-between items-center">
+                        <!-- GANTI NOMOR REKENING DI BAWAH INI -->
+                        <p class="text-xl font-bold text-blue-900" id="norek">2910939346</p>
+                        <i class="fas fa-copy text-gray-400"></i>
+                    </div>
+                    <p id="copyFeedback" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor berhasil disalin!</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-4 shadow-sm">
+                    <p class="text-xs text-gray-500 mb-1">Atas Nama</p>
+                    <!-- GANTI NAMA DI BAWAH INI -->
+                    <p class="text-sm font-semibold text-gray-700">Sahur Husen</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="bg-white rounded-lg p-4 mb-3">
-            <p class="text-xs text-gray-500 mb-1">Nomor Rekening</p>
-            <p class="text-xl font-bold text-blue-900 select-all">2910939346</p>
+
+        <!-- Confirm Button -->
+        <div class="px-6 pb-8">
+            <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
+                <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
+            </a>
+            <p class="text-xs text-center text-gray-500 mt-3">Kirim bukti transfer via WhatsApp untuk proses cepat.</p>
         </div>
-        
-        <div class="bg-white rounded-lg p-4">
-            <p class="text-xs text-gray-500 mb-1">Atas Nama</p>
-            <p class="text-sm font-semibold text-gray-700">Sahur Husen</p>
-        </div>
-        
-        <p class="text-xs text-gray-500 mt-4 italic">*Konfirmasi via WhatsApp setelah transfer</p>
     </div>
-</div>
 
     <script>
-        // Ambil data dari URL (contoh: /invoice.html?name=Budi&service=SIP&price=1500000)
+        // 1. Ambil data dari URL
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name') || 'Klien';
         const service = params.get('service') || 'Layanan';
@@ -66,10 +80,22 @@
         document.getElementById('serviceType').innerText = service;
         document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
 
-        // Link WA (GANTI NOMOR WA LO DI SINI - pakai format 628xxx)
-        const waNumber = '6281229098655'; 
+        // 2. Link WA (GANTI NOMOR WA ADMIN DI SINI)
+        const waAdmin = '6281234567890'; 
         const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
-        document.getElementById('waButton').href = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+        document.getElementById('waButton').href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(message)}`;
+
+        // 3. Fungsi Copy Rekening
+        function copyRek() {
+            const norek = document.getElementById('norek').innerText;
+            navigator.clipboard.writeText(norek).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.remove('hidden');
+                setTimeout(() => feedback.classList.add('hidden'), 2000);
+            }).catch(err => {
+                alert('Gagal menyalin, silakan copy manual: ' + norek);
+            });
+        }
     </script>
 </body>
 </html>
