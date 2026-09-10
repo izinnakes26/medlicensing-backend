@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8">
-        <h1 class="text-2xl font-bold text-blue-900 mb-6 text-center">🛠️ Buat Invoice Client</h1>
+        <h1 class="text-2xl font-bold text-blue-900 mb-6 text-center">️ Buat Invoice Client</h1>
         
         <div class="space-y-4">
             <div>
@@ -16,10 +16,21 @@
                 <input type="text" id="nama" placeholder="Contoh: Dr. Andi Wijaya" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             
+            <!-- BAGIAN DROPDOWN LAYANAN -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Layanan</label>
-                <input type="text" id="layanan" placeholder="Contoh: Pengurusan SIP Klinik" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                <select id="layanan" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                    <option value="" disabled selected>-- Pilih Jenis Layanan --</option>
+                    <option value="Pengurusan SIP">Pengurusan SIP (Surat Izin Praktik)</option>
+                    <option value="Perpanjangan SIP">Perpanjangan SIP</option>
+                    <option value="Pengurusan STR">Pengurusan STR (Surat Tanda Registrasi)</option>
+                    <option value="Perpanjangan STR">Perpanjangan STR</option>
+                    <option value="Pengurusan Izin Klinik">Pengurusan Izin Klinik</option>
+                    <option value="Paket SIP & STR">Paket SIP & STR</option>
+                    <option value="Konsultasi Perizinan">Konsultasi Perizinan Lainnya</option>
+                </select>
             </div>
+            <!-- SELESAI BAGIAN DROPDOWN -->
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (Angka saja)</label>
