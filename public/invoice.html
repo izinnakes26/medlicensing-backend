@@ -6,12 +6,28 @@
     <title>Invoice Pembayaran - Medlicensing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Library untuk Download PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- CSS Khusus Print/PDF -->
+    <style>
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #invoice-content {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
     
-    <!-- AREA YANG AKAN DI-DOWNLOAD JADI PDF -->
+    <!-- AREA INVOICE -->
     <div id="invoice-content" class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
         <!-- Header -->
         <div class="bg-blue-900 p-6 text-white text-center">
@@ -35,11 +51,11 @@
             </div>
         </div>
 
-        <!-- Bagian Rekening (BCA & BRI) -->
+        <!-- Bagian Rekening -->
         <div class="px-6 pb-6">
             <p class="text-sm text-gray-700 font-bold mb-3 text-center">Silakan transfer ke salah satu rekening berikut:</p>
             
-            <!-- KOTAK BCA (Sudah disesuaikan dengan data lo) -->
+            <!-- BCA -->
             <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-3 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('2910939346', 'bca')">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-bold text-blue-800">BANK BCA</span>
@@ -50,7 +66,7 @@
                 <p id="feedback-bca" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor BCA berhasil disalin!</p>
             </div>
 
-            <!-- KOTAK BRI (Sudah disesuaikan dengan data lo) -->
+            <!-- BRI -->
             <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('041901056134503', 'bri')">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs font-bold text-orange-800">BANK BRI</span>
@@ -62,10 +78,9 @@
             </div>
         </div>
     </div>
-    <!-- AKHIR AREA PDF -->
 
-    <!-- TOMBOL AKSI (TIDAK IKUT TERCETAK DI PDF) -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex flex-col gap-3 max-w-md mx-auto rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
+    <!-- TOMBOL AKSI (TIDAK IKUT TERCETAK) -->
+    <div class="no-print fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex flex-col gap-3 max-w-md mx-auto rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
         <button onclick="downloadPDF()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg flex justify-center items-center">
             <i class="fas fa-file-pdf mr-2"></i> Download Invoice PDF
         </button>
@@ -86,7 +101,7 @@
         document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
 
         // 2. Link WA (GANTI NOMOR WA ADMIN DI SINI)
-        const waAdmin = '6281229098655'; // <-- GANTI DENGAN NOMOR WA LO
+        const waAdmin = '628129098655'; // <-- GANTI DENGAN NOMOR WA LO
         const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
         document.getElementById('waButton').href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(message)}`;
 
@@ -101,29 +116,9 @@
             });
         }
 
-        // 4. Fungsi Download PDF
+        // 4. Fungsi Download PDF (Pakai window.print)
         function downloadPDF() {
-            const element = document.getElementById('invoice-content');
-            const namaClient = document.getElementById('clientName').innerText.replace(/\s+/g, '_');
-            
-            const opt = {
-                margin: 10,
-                filename: `Invoice_Medlicensing_${namaClient}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            
-            // Ubah teks tombol saat proses
-            const btn = event.target.closest('button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
-            btn.disabled = true;
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
+            window.print();
         }
     </script>
 </body>
