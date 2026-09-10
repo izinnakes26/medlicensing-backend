@@ -15,7 +15,7 @@
             <p class="text-blue-200 text-sm">Medlicensing Indonesia</p>
         </div>
 
-        <!-- Detail -->
+        <!-- Detail Client -->
         <div class="p-6 space-y-4">
             <div class="flex justify-between border-b pb-3">
                 <span class="text-gray-600">Nama Klien</span>
@@ -31,36 +31,36 @@
             </div>
         </div>
 
-        <!-- Rekening Section (CLICK TO COPY) -->
+        <!-- Bagian Rekening (BCA & BRI) -->
         <div class="px-6 pb-6">
-            <div class="bg-blue-50 rounded-xl p-5 border-2 border-blue-100">
-                <p class="text-sm text-blue-800 mb-4 font-bold text-center">Transfer ke Rekening:</p>
-                
-                <div class="bg-white rounded-lg p-4 mb-3 shadow-sm">
-                    <p class="text-xs text-gray-500 mb-1">Bank</p>
-                    <p class="text-lg font-bold text-gray-800">BCA</p>
+            <p class="text-sm text-gray-700 font-bold mb-3 text-center">Silakan transfer ke salah satu rekening berikut:</p>
+            
+            <!-- KOTAK BCA -->
+            <!-- GANTI NOMOR REKENING BCA DI BAWAH INI (ada 2 tempat: di onclick dan di teks) -->
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-3 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('1234567890', 'bca')">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-bold text-blue-800">BANK BCA</span>
+                    <i class="fas fa-copy text-blue-400"></i>
                 </div>
-                
-                <!-- Tombol Salin Rekening -->
-                <div class="bg-white rounded-lg p-4 shadow-sm cursor-pointer active:scale-95 transition-transform" onclick="copyRek()">
-                    <p class="text-xs text-gray-500 mb-1">Nomor Rekening (Klik untuk salin)</p>
-                    <div class="flex justify-between items-center">
-                        <!-- GANTI NOMOR REKENING DI BAWAH INI -->
-                        <p class="text-xl font-bold text-blue-900" id="norek">2910939346</p>
-                        <i class="fas fa-copy text-gray-400"></i>
-                    </div>
-                    <p id="copyFeedback" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor berhasil disalin!</p>
-                </div>
+                <p class="text-xl font-bold text-gray-800 tracking-wider" id="norek-bca">2910939346</p>
+                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p> <!-- GANTI NAMA PEMILIK REK BCA -->
+                <p id="feedback-bca" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor BCA berhasil disalin!</p>
+            </div>
 
-                <div class="bg-white rounded-lg p-4 shadow-sm">
-                    <p class="text-xs text-gray-500 mb-1">Atas Nama</p>
-                    <!-- GANTI NAMA DI BAWAH INI -->
-                    <p class="text-sm font-semibold text-gray-700">Sahur Husen</p>
+            <!-- KOTAK BRI -->
+            <!-- GANTI NOMOR REKENING BRI DI BAWAH INI (ada 2 tempat: di onclick dan di teks) -->
+            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 cursor-pointer active:scale-95 transition-transform" onclick="copyRek('0987654321', 'bri')">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-bold text-orange-800">BANK BRI</span>
+                    <i class="fas fa-copy text-orange-400"></i>
                 </div>
+                <p class="text-xl font-bold text-gray-800 tracking-wider" id="norek-bri">041901056134503</p>
+                <p class="text-xs text-gray-600 mt-1">a.n. SAHUR HUSEN</p> <!-- GANTI NAMA PEMILIK REK BRI -->
+                <p id="feedback-bri" class="text-xs text-green-600 font-semibold mt-2 hidden">✅ Nomor BRI berhasil disalin!</p>
             </div>
         </div>
 
-        <!-- Confirm Button -->
+        <!-- Tombol Konfirmasi WA -->
         <div class="px-6 pb-8">
             <a id="waButton" href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl text-center transition duration-200 shadow-lg">
                 <i class="fab fa-whatsapp mr-2"></i> Konfirmasi Pembayaran
@@ -81,19 +81,18 @@
         document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(price).toLocaleString('id-ID');
 
         // 2. Link WA (GANTI NOMOR WA ADMIN DI SINI)
-        const waAdmin = '6281234567890'; 
+        const waAdmin = '6281229098655'; 
         const message = `Halo Admin Medlicensing, saya ${name} sudah melakukan pembayaran untuk layanan ${service} sebesar Rp ${parseInt(price).toLocaleString('id-ID')}. Berikut bukti transfernya.`;
         document.getElementById('waButton').href = `https://wa.me/${waAdmin}?text=${encodeURIComponent(message)}`;
 
-        // 3. Fungsi Copy Rekening
-        function copyRek() {
-            const norek = document.getElementById('norek').innerText;
-            navigator.clipboard.writeText(norek).then(() => {
-                const feedback = document.getElementById('copyFeedback');
+        // 3. Fungsi Copy Rekening (Bisa untuk BCA & BRI)
+        function copyRek(nomor, bank) {
+            navigator.clipboard.writeText(nomor).then(() => {
+                const feedback = document.getElementById(`feedback-${bank}`);
                 feedback.classList.remove('hidden');
-                setTimeout(() => feedback.classList.add('hidden'), 2000);
+                setTimeout(() => feedback.classList.add('hidden'), 2500);
             }).catch(err => {
-                alert('Gagal menyalin, silakan copy manual: ' + norek);
+                alert('Gagal menyalin, silakan copy manual: ' + nomor);
             });
         }
     </script>
