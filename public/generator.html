@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Invoice - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8">
+        <h1 class="text-2xl font-bold text-blue-900 mb-6 text-center">🛠️ Buat Invoice Client</h1>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Client</label>
+                <input type="text" id="nama" placeholder="Contoh: Dr. Andi Wijaya" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Layanan</label>
+                <input type="text" id="layanan" placeholder="Contoh: Pengurusan SIP Klinik" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (Angka saja)</label>
+                <input type="number" id="harga" placeholder="Contoh: 2500000" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nomor WA Client (628xxx)</label>
+                <input type="number" id="waClient" placeholder="Contoh: 628123456789" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <button onclick="buatInvoice()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition duration-200 mt-4">
+                🚀 Buat & Kirim Invoice
+            </button>
+        </div>
+
+        <!-- Hasil Link -->
+        <div id="hasilBox" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+            <p class="text-sm text-green-800 font-semibold mb-2">✅ Link Invoice Siap!</p>
+            <input type="text" id="linkHasil" readonly class="w-full text-xs bg-white border p-2 rounded mb-3 text-gray-600">
+            <button onclick="copyLink()" class="w-full bg-green-600 text-white text-sm py-2 rounded hover:bg-green-700">Copy Link</button>
+        </div>
+    </div>
+
+    <script>
+        function buatInvoice() {
+            const nama = document.getElementById('nama').value;
+            const layanan = document.getElementById('layanan').value;
+            const harga = document.getElementById('harga').value;
+            const waClient = document.getElementById('waClient').value;
+
+            if(!nama || !layanan || !harga || !waClient) {
+                alert('Mohon isi semua data!');
+                return;
+            }
+
+            // Format Rupiah
+            const hargaFormat = new Intl.NumberFormat('id-ID').format(harga);
+
+            // Buat Link Invoice
+            const baseUrl = window.location.origin + '/invoice.html';
+            const linkInvoice = `${baseUrl}?name=${encodeURIComponent(nama)}&service=${encodeURIComponent(layanan)}&price=${harga}`;
+
+            // Tampilkan Link
+            document.getElementById('hasilBox').classList.remove('hidden');
+            document.getElementById('linkHasil').value = linkInvoice;
+
+            // Buat Pesan WA Otomatis
+            const pesanWA = `Yth. Bapak/Ibu ${nama},\n\nBerikut kami sampaikan invoice pembayaran untuk layanan *${layanan}* sebesar *Rp ${hargaFormat}*.\n\nSilakan cek detail dan lakukan pembayaran melalui link berikut:\n${linkInvoice}\n\nTerima kasih.\n- Tim Medlicensing`;
+            
+            // Langsung buka WA Client
+            const linkWA = `https://wa.me/${waClient}?text=${encodeURIComponent(pesanWA)}`;
+            window.open(linkWA, '_blank');
+        }
+
+        function copyLink() {
+            const copyText = document.getElementById("linkHasil");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Link berhasil di-copy!");
+        }
+    </script>
+</body>
+</html>
